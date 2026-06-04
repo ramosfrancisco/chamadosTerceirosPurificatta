@@ -381,10 +381,38 @@ app.get('/api/log-emails', authAdmin, async (req, res) => {
   } catch (err) { res.status(500).json({ error: 'Erro interno' }); }
 });
 
+// ── ALIAS: change-password (usado pelo admin frontend) ───────
+app.post('/api/auth/change-password', async (req, res) => {
+  // Reuse /api/admins/minha-senha logic
+  try {
+    const authHeader = req.headers.authorization || '';
+    const token = authHeader.replace('Bearer ', '');
+    if (!token) return res.status(401).json({ error: 'Sem autorização' });
+    const jwt = require('jsonwebtoken');
+    let decoded;
+    try { decoded = jwt.verify(token, process.env.JWT_SECRET); } catch { return res.status(401).json({ error: 'Token inválido' }); }
+    const bcrypt = require('bcryptjs');
+    const { currentPassword, newPassword } = req.body;
+    const { rows } = await db.query('SELECT * FROM admins WHERE id=$1', [decoded.id]);
+    if (!rows[0]) return res.status(404).json({ error: 'Admin não encontrado' });
+    const ok = await bcrypt.compare(currentPassword, rows[0].password_hash);
+    if (!ok) return res.status(401).json({ error: 'Senha atual incorreta' });
+    if (!newPassword || newPassword.length < 6) return res.status(400).json({ error: 'Mínimo 6 caracteres' });
+    const hash = await bcrypt.hash(newPassword, 10);
+    await db.query('UPDATE admins SET password_hash=$1,updated_at=NOW() WHERE id=$2', [hash, decoded.id]);
+    res.json({ ok: true });
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Erro interno' }); }
+});
+
 // ── SPA ──────────────────────────────────────────────────────
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, '../public/admin/index.html')));
+app.get('/admin/', (req, res) => res.sendFile(path.join(__dirname, '../public/admin/index.html')));
+app.get('/prestador', (req, res) => res.sendFile(path.join(__dirname, '../public/prestador/index.html')));
+app.get('/prestador/', (req, res) => res.sendFile(path.join(__dirname, '../public/prestador/index.html')));
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')));
 
 app.listen(PORT, () => {
   console.log(`Purificatta rodando na porta ${PORT}`);
   iniciarCron();
 });
+
