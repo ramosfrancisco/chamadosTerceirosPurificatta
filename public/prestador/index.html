@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purificatta – Tabela de Chamados</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--az:#1F497D;--azc:#2E75B6;--azf:#DCE6F1;--ci:#F4F7FB;--cb:#C9D9ED;--tx:#1a2e45;--tl:#5a7a9a;--vd:#1a7a4a;--vm:#c0392b;--or:#e67e22}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#eef3f9;color:var(--tx);min-height:100vh}
+.pg{max-width:1500px;margin:0 auto;padding:0 0 40px 0}
+.hd{background:var(--az);border-radius:0;padding:20px 28px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.hdl h1{font-size:17px;font-weight:600;color:#fff}
+.hdl p{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px}
+.badge{margin-top:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:6px 12px;display:inline-block}
+.badge span{display:block;font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:1px}
+.badge strong{font-size:14px;color:#fff;font-weight:600}
+.rates{display:flex;gap:7px;flex-wrap:wrap}
+.rtag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:7px;padding:7px 10px}
+.rtag span{display:block;font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.3px;margin-bottom:1px}
+.rtag strong{font-family:'DM Mono',monospace;font-size:12px;color:#fff}
+.fbar{background:var(--azc);padding:9px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.fbar label{font-size:12px;color:rgba(255,255,255,.8);font-weight:500}
+.fbar select,.fbar input[type=number]{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:7px;padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:13px;color:#fff;outline:none}
+.fbar select option{color:var(--tx);background:#fff}
+.tb2{background:var(--azc);padding:9px 28px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.1)}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .15s}
+.bw{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)}.bw:hover{background:rgba(255,255,255,.25)}
+.bg{background:#27ae60;color:#fff}.bg:hover{background:#219a52}
+.bo{background:var(--or);color:#fff}.bo:hover{background:#d35400}
+.br{background:rgba(192,57,43,.85);color:#fff}.br:hover{background:var(--vm)}
+.bh{background:#546e8a;color:#fff}.bh:hover{background:#425669}
+.tw{background:#fff;overflow-x:auto;margin:0}
+table{width:100%;border-collapse:collapse;min-width:980px}
+thead tr{background:var(--azf)}
+thead th{padding:11px 7px;font-size:10px;font-weight:600;color:var(--az);text-transform:uppercase;letter-spacing:.5px;text-align:center;border-bottom:2px solid var(--cb);white-space:nowrap}
+thead th.tl{text-align:left;padding-left:14px}
+tbody tr{border-bottom:1px solid #edf2f8}
+tbody tr:hover{background:#f8fbff}
+tbody td{padding:6px 4px;text-align:center;vertical-align:middle}
+tbody td.tl{padding-left:12px}
+.ci{width:100%;border:1px solid transparent;border-radius:5px;padding:5px 6px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--tx);background:transparent;outline:none;text-align:center;transition:all .15s}
+.ci:focus{border-color:var(--azc);background:#f0f6ff}
+.ci.tl{text-align:left}
+.ci.mn{font-family:'DM Mono',monospace}
+.cd{width:100%;border:1px solid transparent;border-radius:5px;padding:5px 6px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--tx);background:transparent;outline:none;resize:none;transition:all .15s;line-height:1.4;min-height:30px}
+.cd:focus{border-color:var(--azc);background:#f0f6ff}
+.ti{width:68px;border:1px solid transparent;border-radius:5px;padding:5px 6px;font-family:'DM Mono',monospace;font-size:12px;color:var(--tx);background:transparent;outline:none;text-align:center;transition:all .15s}
+.ti:focus{border-color:var(--azc);background:#f0f6ff}
+.ti::placeholder{color:#aab;font-size:11px}
+.cc{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--az);padding:5px 7px;background:var(--ci);border-radius:5px;display:inline-block;min-width:76px;text-align:right}
+.tc{font-family:'DM Mono',monospace;font-size:13px;font-weight:600;color:var(--vd);padding:5px 8px;background:#eaf7f0;border-radius:5px;display:inline-block;min-width:84px;text-align:right}
+.bd{background:none;border:none;cursor:pointer;color:#ccd6e0;font-size:14px;padding:3px 5px;border-radius:4px;transition:all .15s;line-height:1}
+.bd:hover{color:var(--vm);background:#fdecea}
+.ft{background:var(--az);padding:16px 28px;display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+.ftb{display:flex;flex-direction:column;gap:2px}
+.ftb label{font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px;font-weight:500}
+.ftb span{font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:#fff}
+.ftb.gd span{font-size:20px;color:#7effc1}
+.dv{width:1px;background:rgba(255,255,255,.15);height:34px}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px}
+.ov.show{display:flex}
+.ob{background:#fff;border-radius:14px;padding:28px;max-width:880px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.oh{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.oh h2{font-size:16px;font-weight:600;color:var(--az)}
+.ox{background:none;border:none;font-size:22px;cursor:pointer;color:#999;line-height:1}.ox:hover{color:var(--vm)}
+.oa{display:flex;gap:8px;justify-content:flex-end;padding-top:14px;border-top:1px solid var(--azf);margin-top:16px}
+.cov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center}
+.cov.show{display:flex}
+.cb2{background:#fff;border-radius:12px;padding:26px 28px;max-width:340px;width:90%;text-align:center}
+.cb2 h3{font-size:15px;font-weight:600;margin-bottom:7px}
+.cb2 p{font-size:12px;color:var(--tl);margin-bottom:20px}
+.cbt{display:flex;gap:8px;justify-content:center}
+.saving{font-size:11px;color:rgba(255,255,255,.6);padding:4px 10px;background:rgba(255,255,255,.1);border-radius:20px;display:none}
+#errScreen{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:12px;text-align:center;padding:20px}
+#errScreen h2{font-size:20px;font-weight:600;color:var(--vm)}
+#errScreen p{color:var(--tl);font-size:14px}
+@media print{.fbar,.tb2,.bd{display:none!important}body{background:#fff}.ci,.cd,.ti{border:none!important;background:transparent!important}.ft,.hd{border-radius:0}.ov,.cov{display:none!important}}
+</style>
+</head>
+<body>
+
+<div id="errScreen">
+  <h2>Link inválido ou expirado</h2>
+  <p>Este link não existe ou foi desativado pela Purificatta.<br>Entre em contato para obter um novo link.</p>
+</div>
+
+<div id="appScreen" style="display:none">
+<div class="pg">
+<div class="hd">
+  <div class="hdl">
+    <h1>Purificatta — Tabela de Chamados</h1>
+    <p id="hdAno">—</p>
+    <div class="badge"><span>Prestador de Serviços</span><strong id="hdNome">—</strong></div>
+  </div>
+  <div class="rates" id="hdRates"></div>
+</div>
+
+<div class="fbar">
+  <label>Filtrar por:</label>
+  <select id="filtAno" onchange="recarregar()">
+    <option value="">Todos os anos</option>
+  </select>
+  <select id="filtMes" onchange="recarregar()">
+    <option value="">Todos os meses</option>
+    <option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option>
+    <option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option>
+    <option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option>
+    <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+  </select>
+  <span class="saving" id="savingBadge">⏳ Salvando...</span>
+</div>
+
+<div class="tb2">
+  <button class="btn bw" onclick="addRow()">+ Nova linha</button>
+  <button class="btn bo" onclick="abrirPDF()">📄 Gerar PDF</button>
+  <button class="btn bw" onclick="window.print()">🖨 Imprimir</button>
+  <button class="btn bg" onclick="exportCSV()">⬇ CSV</button>
+  <button class="btn bh" onclick="abrirHist()">📋 Histórico</button>
+  <button class="btn br" onclick="pedirLimpar()">🗑 Limpar tudo</button>
+</div>
+
+<div class="tw">
+<table>
+  <thead><tr>
+    <th class="tl">Data</th><th>Chamado</th><th>Cliente</th>
+    <th>KM Ida e Volta</th>
+    <th class="tl" style="min-width:160px">Descrição do Serviço</th>
+    <th>Tempo (h:mm)</th>
+    <th>Estacionamento (R$)</th><th>Peças (R$)</th>
+    <th>Total KM</th><th>Total Serviço</th><th>Total Extra</th><th>Total</th><th></th>
+  </tr></thead>
+  <tbody id="tbBody"></tbody>
+</table>
+</div>
+
+<div class="ft">
+  <div class="ftb"><label>Total KM</label><span id="fKm">R$ 0,00</span></div>
+  <div class="dv"></div>
+  <div class="ftb"><label>Total Serviços</label><span id="fSer">R$ 0,00</span></div>
+  <div class="dv"></div>
+  <div class="ftb"><label>Total Extra</label><span id="fExt">R$ 0,00</span></div>
+  <div class="dv"></div>
+  <div class="ftb gd"><label>Total Geral</label><span id="fTot">R$ 0,00</span></div>
+</div>
+</div>
+</div>
+
+<!-- PDF overlay -->
+<div class="ov" id="ovPDF">
+<div class="ob">
+  <div class="oh"><h2>📄 Relatório do Período</h2><button class="ox" onclick="fov('ovPDF')">×</button></div>
+  <div id="pdfCont"></div>
+  <div class="oa">
+    <button class="btn bw" style="color:#333;border-color:#ccc" onclick="fov('ovPDF')">Fechar</button>
+    <button class="btn bo" onclick="imprimirPDF(document.getElementById('pdfCont').innerHTML)">🖨 Imprimir / Salvar PDF</button>
+  </div>
+</div>
+</div>
+
+<!-- Hist overlay -->
+<div class="ov" id="ovHist">
+<div class="ob" style="max-width:720px">
+  <div class="oh"><h2>📋 Histórico de Exportações</h2><button class="ox" onclick="fov('ovHist')">×</button></div>
+  <div id="histCont"></div>
+  <div class="oa">
+    <button class="btn bw" style="color:#333;border-color:#ccc" onclick="fov('ovHist')">Fechar</button>
+  </div>
+</div>
+</div>
+
+<!-- Confirm -->
+<div class="cov" id="ovConf">
+<div class="cb2">
+  <h3>Limpar tudo?</h3>
+  <p>Remove todos os chamados visíveis. Esta ação não pode ser desfeita.</p>
+  <div class="cbt">
+    <button class="btn bw" style="color:#333;border-color:#ccc" onclick="fov('ovConf')">Cancelar</button>
+    <button class="btn br" onclick="limparTudo()">Sim, limpar</button>
+  </div>
+</div>
+</div>
+
+<script>
+var TOKEN = location.pathname.split('/p/')[1] || '';
+var R = {};
+var PREST = '';
+var rows = [];
+var hist = [];
+var saveQ = [];
+var saveTimer = null;
+
+function fmt(v){return 'R$ '+(+v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
+function fmtN(v){return (+v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
+function pTime(s){if(!s)return 0;s=s.trim();if(s.indexOf(':')>=0){var p=s.split(':');return(parseInt(p[0])||0)+(parseInt(p[1])||0)/60;}return parseFloat(s)||0;}
+function fov(id){document.getElementById(id).classList.remove('show');}
+
+function api(path,opts){
+  opts=opts||{};
+  opts.headers={'Content-Type':'application/json'};
+  if(opts.body && typeof opts.body==='object') opts.body=JSON.stringify(opts.body);
+  return fetch('/api'+path,opts).then(function(r){return r.json();});
+}
+
+async function init(){
+  var p=await api('/p/'+TOKEN);
+  if(p.error){document.getElementById('errScreen').style.display='flex';return;}
+  R={km:+p.valor_km,hora:+p.valor_hora,higA:+p.valor_hig_a,higB:+p.valor_hig_b,inst:+p.valor_inst,trans:+p.valor_trans};
+  PREST=p.nome;
+  document.getElementById('hdNome').textContent=PREST;
+  document.getElementById('appScreen').style.display='block';
+  // Fill rate bar
+  var rateItems=[['R$/KM',fmt(R.km)],['Hora Técnica',fmt(R.hora)+'/h'],['Hig.PE/PG/PL',fmt(R.higA)],['Hig.Osmose',fmt(R.higB)],['Inst./Desins.',fmt(R.inst)],['Transp.Máquinas',fmt(R.trans)]];
+  document.getElementById('hdRates').innerHTML=rateItems.map(function(i){return '<div class="rtag"><span>'+i[0]+'</span><strong>'+i[1]+'</strong></div>';}).join('');
+  // Populate year filter
+  var ano=new Date().getFullYear();
+  var sel=document.getElementById('filtAno');
+  for(var y=ano;y>=ano-3;y--){var o=document.createElement('option');o.value=y;o.textContent=y;sel.appendChild(o);}
+  sel.value=ano;
+  document.getElementById('hdAno').textContent='Ano de Referência: '+ano;
+  await recarregar();
+  // Load history
+  var h=await api('/historico-pdf?token='+TOKEN);
+  if(!h.error) hist=h;
+}
+
+async function recarregar(){
+  var ano=document.getElementById('filtAno').value;
+  var mes=document.getElementById('filtMes').value;
+  var qs='?token='+TOKEN;
+  if(ano) qs+='&ano='+ano;
+  if(mes) qs+='&mes='+mes;
+  var data=await api('/chamados'+qs);
+  if(data.error){rows=[];}else{rows=data;}
+  render();
+}
+
+function render(){
+  var tbody=document.getElementById('tbBody');
+  tbody.innerHTML='';
+  rows.forEach(function(row){
+    var tr=document.createElement('tr');
+    tr.setAttribute('data-id',row.id);
+    var df=row.data_chamado?row.data_chamado.substring(0,10):'';
+    var tempoStr=row.tempo_horas?horasParaHHMM(+row.tempo_horas):'';
+    tr.innerHTML=
+      '<td class="tl"><input class="ci tl" type="date" data-f="data_chamado" value="'+df+'" onchange="updRow(\''+row.id+'\',this)"></td>'+
+      '<td><input class="ci" type="text" data-f="numero_chamado" placeholder="Nº" value="'+(row.numero_chamado||'')+'" oninput="updRow(\''+row.id+'\',this)"></td>'+
+      '<td><input class="ci tl" type="text" data-f="cliente" placeholder="Nome" value="'+(row.cliente||'')+'" oninput="updRow(\''+row.id+'\',this)"></td>'+
+      '<td><input class="ci mn" type="number" data-f="km_ida_volta" placeholder="0" value="'+(row.km_ida_volta||'')+'" min="0" step="0.1" oninput="updRow(\''+row.id+'\',this)"></td>'+
+      '<td class="tl"><textarea class="cd" data-f="descricao" placeholder="Descreva o serviço..." rows="1" oninput="updRow(\''+row.id+'\',this)">'+(row.descricao||'')+'</textarea></td>'+
+      '<td><input class="ti" type="text" data-f="tempo_horas" placeholder="0:00" value="'+tempoStr+'" oninput="updRow(\''+row.id+'\',this)"></td>'+
+      '<td><input class="ci mn" type="number" data-f="estacionamento" placeholder="0,00" value="'+(row.estacionamento||'')+'" min="0" step="0.01" oninput="updRow(\''+row.id+'\',this)"></td>'+
+      '<td><input class="ci mn" type="number" data-f="pecas" placeholder="0,00" value="'+(row.pecas||'')+'" min="0" step="0.01" oninput="updRow(\''+row.id+'\',this)"></td>'+
+      '<td><span class="cc" id="ck'+row.id+'">'+fmt(cKm(row))+'</span></td>'+
+      '<td><span class="cc" id="cs'+row.id+'">'+fmt(cSvc(row))+'</span></td>'+
+      '<td><span class="cc" id="ce'+row.id+'">'+fmt(cExt(row))+'</span></td>'+
+      '<td><span class="tc" id="ct'+row.id+'">'+fmt(cTot(row))+'</span></td>'+
+      '<td><button class="bd" onclick="delRow(\''+row.id+'\')">✕</button></td>';
+    tbody.appendChild(tr);
+  });
+  foot();
+}
+
+function horasParaHHMM(h){var hh=Math.floor(h);var mm=Math.round((h-hh)*60);return hh+':'+(mm<10?'0':'')+mm;}
+
+function cKm(r){return(+r.km_ida_volta||0)*R.km;}
+function cSvc(r){return pTime(typeof r._tempoStr!=='undefined'?r._tempoStr:(r.tempo_horas?horasParaHHMM(+r.tempo_horas):''))*R.hora;}
+function cExt(r){return(+r.estacionamento||0)+(+r.pecas||0);}
+function cTot(r){return cKm(r)+cSvc(r)+cExt(r);}
+
+function foot(){
+  var sk=0,ss=0,se=0,st=0;
+  rows.forEach(function(r){sk+=cKm(r);ss+=cSvc(r);se+=cExt(r);st+=cTot(r);});
+  document.getElementById('fKm').textContent=fmt(sk);
+  document.getElementById('fSer').textContent=fmt(ss);
+  document.getElementById('fExt').textContent=fmt(se);
+  document.getElementById('fTot').textContent=fmt(st);
+}
+
+async function addRow(){
+  var res=await api('/chamados',{method:'POST',body:{token:TOKEN}});
+  if(res.error){alert('Erro ao adicionar linha: '+res.error);return;}
+  rows.push(res);
+  render();
+  setTimeout(function(){var r=document.querySelector('tr[data-id="'+res.id+'"]');if(r)r.querySelector('input').focus();},50);
+}
+
+async function delRow(id){
+  await api('/chamados/'+id,{method:'DELETE',body:{token:TOKEN}});
+  rows=rows.filter(function(r){return r.id!==id;});
+  render();
+}
+
+function updRow(id,el){
+  var row=rows.find(function(r){return r.id===id;});
+  if(!row)return;
+  var field=el.getAttribute('data-f');
+  var val=el.value;
+  if(field==='tempo_horas'){row._tempoStr=val;row.tempo_horas=pTime(val);}
+  else{row[field]=val;}
+  document.getElementById('ck'+id).textContent=fmt(cKm(row));
+  document.getElementById('cs'+id).textContent=fmt(cSvc(row));
+  document.getElementById('ce'+id).textContent=fmt(cExt(row));
+  document.getElementById('ct'+id).textContent=fmt(cTot(row));
+  foot();
+  scheduleSave(id,row);
+}
+
+function scheduleSave(id,row){
+  var badge=document.getElementById('savingBadge');
+  badge.style.display='inline-block';
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async function(){
+    var body={token:TOKEN};
+    var field_map={data_chamado:row.data_chamado,numero_chamado:row.numero_chamado,cliente:row.cliente,km_ida_volta:+row.km_ida_volta||0,descricao:row.descricao,tempo_horas:+row.tempo_horas||0,estacionamento:+row.estacionamento||0,pecas:+row.pecas||0};
+    Object.assign(body,field_map);
+    await api('/chamados/'+id,{method:'PUT',body:body});
+    badge.style.display='none';
+  },1500);
+}
+
+function pedirLimpar(){document.getElementById('ovConf').classList.add('show');}
+async function limparTudo(){
+  for(var i=0;i<rows.length;i++){await api('/chamados/'+rows[i].id,{method:'DELETE',body:{token:TOKEN}});}
+  rows=[];render();fov('ovConf');
+}
+
+// PDF
+function buildPDFHTML(rws,exportDate){
+  var sk=0,ss=0,se=0,st=0;
+  rws.forEach(function(r){sk+=cKm(r);ss+=cSvc(r);se+=cExt(r);st+=cTot(r);});
+  var tbody='';
+  rws.forEach(function(row){
+    var df=row.data_chamado?new Date(row.data_chamado+'T12:00:00').toLocaleDateString('pt-BR'):'—';
+    var th=row.tempo_horas?horasParaHHMM(+row.tempo_horas):'—';
+    tbody+='<tr>'+
+      '<td>'+df+'</td><td>'+(row.numero_chamado||'—')+'</td><td>'+(row.cliente||'—')+'</td>'+
+      '<td class="mn">'+(row.km_ida_volta||0)+' km</td>'+
+      '<td style="text-align:left;max-width:160px;word-wrap:break-word">'+(row.descricao||'—')+'</td>'+
+      '<td class="mn">'+th+'</td>'+
+      '<td class="mn">R$ '+(+row.estacionamento||0).toFixed(2).replace('.',',')+'</td>'+
+      '<td class="mn">R$ '+(+row.pecas||0).toFixed(2).replace('.',',')+'</td>'+
+      '<td class="mn">'+fmtN(cKm(row))+'</td>'+
+      '<td class="mn">'+fmtN(cSvc(row))+'</td>'+
+      '<td class="mn">'+fmtN(cExt(row))+'</td>'+
+      '<td class="mn" style="font-weight:600;color:#1a7a4a">'+fmtN(cTot(row))+'</td>'+
+    '</tr>';
+  });
+  return '<div style="text-align:center;margin-bottom:18px">'+
+    '<h3 style="font-size:18px;font-weight:600;color:#1F497D;margin-bottom:3px">Purificatta — Relatório de Chamados</h3>'+
+    '<p style="font-size:12px;color:#5a7a9a">Emitido em '+exportDate+'</p></div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;padding:14px;background:#DCE6F1;border-radius:8px">'+
+    '<div><div style="font-size:10px;font-weight:600;color:#1F497D;text-transform:uppercase;margin-bottom:2px">Prestador</div><div>'+PREST+'</div></div>'+
+    '<div><div style="font-size:10px;font-weight:600;color:#1F497D;text-transform:uppercase;margin-bottom:2px">Chamados</div><div>'+rws.length+'</div></div>'+
+    '<div><div style="font-size:10px;font-weight:600;color:#1F497D;text-transform:uppercase;margin-bottom:2px">Total Geral</div>'+
+    '<div style="color:#1a7a4a;font-family:monospace;font-weight:600">'+fmt(st)+'</div></div></div>'+
+    '<table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px">'+
+    '<thead><tr style="background:#1F497D">'+
+    '<th style="color:#fff;padding:7px 5px;text-align:left;padding-left:8px;font-size:9px;text-transform:uppercase">Data</th>'+
+    '<th style="color:#fff;padding:7px 5px;font-size:9px;text-transform:uppercase">Chamado</th>'+
+    '<th style="color:#fff;padding:7px 5px;font-size:9px;text-transform:uppercase">Cliente</th>'+
+    '<th style="color:#fff;padding:7px 5px;font-size:9px;text-transform:uppercase">KM</th>'+
+    '<th style="color:#fff;padding:7px 5px;text-align:left;font-size:9px;text-transform:uppercase">Descrição</th>'+
+    '<th style="color:#fff;padding:7px 5px;font-size:9px;text-transform:uppercase">Tempo</th>'+
+    '<th style="color:#fff;padding:7px 5px;font-size:9px;text-transform:uppercase">Estac.</th>'+
+    '<th style="color:#fff;padding:7px 5px;font-size:9px;text-transform:uppercase">Peças</th>'+
+    '<th style="color:#fff;padding:7px 5px;font-size:9px;text-transform:uppercase">T.KM</th>'+
+    '<th style="color:#fff;padding:7px 5px;font-size:9px;text-transform:uppercase">T.Serv.</th>'+
+    '<th style="color:#fff;padding:7px 5px;font-size:9px;text-transform:uppercase">T.Extra</th>'+
+    '<th style="color:#fff;padding:7px 5px;font-size:9px;text-transform:uppercase">Total</th>'+
+    '</tr></thead><tbody>'+tbody+
+    '</tbody><tfoot><tr style="background:#DCE6F1">'+
+    '<td colspan="8" style="padding:7px;text-align:right;font-weight:600;color:#1F497D">TOTAIS</td>'+
+    '<td style="font-family:monospace;padding:7px 5px;text-align:center;font-weight:600;color:#1F497D">'+fmtN(sk)+'</td>'+
+    '<td style="font-family:monospace;padding:7px 5px;text-align:center;font-weight:600;color:#1F497D">'+fmtN(ss)+'</td>'+
+    '<td style="font-family:monospace;padding:7px 5px;text-align:center;font-weight:600;color:#1F497D">'+fmtN(se)+'</td>'+
+    '<td style="font-family:monospace;padding:7px 5px;text-align:center;font-weight:600;color:#1F497D">'+fmtN(st)+'</td>'+
+    '</tr></tfoot></table>'+
+    '<div style="display:flex;gap:16px;padding:12px 16px;background:#1F497D;border-radius:8px;margin-bottom:20px">'+
+    '<div><div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:2px">Total KM</div><div style="font-family:monospace;color:#fff;font-size:13px">'+fmt(sk)+'</div></div>'+
+    '<div><div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:2px">Total Serviços</div><div style="font-family:monospace;color:#fff;font-size:13px">'+fmt(ss)+'</div></div>'+
+    '<div><div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:2px">Total Extra</div><div style="font-family:monospace;color:#fff;font-size:13px">'+fmt(se)+'</div></div>'+
+    '<div><div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:2px">Total Geral</div><div style="font-family:monospace;color:#7effc1;font-size:18px;font-weight:600">'+fmt(st)+'</div></div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px">'+
+    '<div style="text-align:center"><div style="border-top:1px solid #999;padding-top:6px;font-size:11px;color:#5a7a9a">Purificatta Ind. Com. e Serviços de Purificação de Água Ltda.<br>CNPJ: 13.769.335/0001-10</div></div>'+
+    '<div style="text-align:center"><div style="border-top:1px solid #999;padding-top:6px;font-size:11px;color:#5a7a9a">'+PREST+'<br>Prestador de Serviços</div></div>'+
+    '</div>';
+}
+
+async function abrirPDF(){
+  var hoje=new Date().toLocaleDateString('pt-BR');
+  var html=buildPDFHTML(rows,hoje);
+  document.getElementById('pdfCont').innerHTML=html;
+  document.getElementById('ovPDF').classList.add('show');
+  var tot=rows.reduce(function(s,r){return s+cTot(r);},0);
+  var res=await api('/historico-pdf',{method:'POST',body:{token:TOKEN,total_chamados:rows.length,total_geral:tot,snapshot:rows}});
+  if(!res.error) hist.unshift(res);
+}
+
+function imprimirPDF(content){
+  var w=window.open('','_blank');
+  w.document.write('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Purificatta – Relatório – '+PREST+'</title>'+
+    '<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">'+
+    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:\'DM Sans\',sans-serif;padding:28px;color:#1a2e45;font-size:13px}.mn{font-family:\'DM Mono\',monospace}'+
+    'table td,table th{padding:6px 5px;border-bottom:1px solid #edf2f8}td:first-child{text-align:left;padding-left:8px}tr:nth-child(even) td{background:#f8fbff}'+
+    '@media print{body{padding:12px}}</style></head><body>'+content+'</body></html>');
+  w.document.close();w.focus();setTimeout(function(){w.print();},600);
+}
+
+async function abrirHist(){
+  var data=await api('/historico-pdf?token='+TOKEN);
+  if(!data.error) hist=data;
+  var cont=document.getElementById('histCont');
+  if(!hist.length){cont.innerHTML='<p style="text-align:center;color:#999;padding:28px;font-size:13px">Nenhuma exportação registrada ainda.</p>';
+  } else {
+    var html='<table style="width:100%;border-collapse:collapse;font-size:13px">'+
+      '<thead><tr style="background:#DCE6F1">'+
+      '<th style="padding:9px 12px;text-align:left;color:#1F497D;font-size:10px;text-transform:uppercase">Data/Hora</th>'+
+      '<th style="padding:9px 8px;text-align:center;color:#1F497D;font-size:10px;text-transform:uppercase">Chamados</th>'+
+      '<th style="padding:9px 8px;text-align:right;color:#1F497D;font-size:10px;text-transform:uppercase">Total</th>'+
+      '<th style="padding:9px 8px;text-align:center;color:#1F497D;font-size:10px;text-transform:uppercase">Ações</th>'+
+      '</tr></thead><tbody>';
+    hist.forEach(function(h,i){
+      var d=new Date(h.gerado_em);
+      var ds=d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      var bg=i%2===0?'#fff':'#f8fbff';
+      html+='<tr style="background:'+bg+';border-bottom:1px solid #edf2f8">'+
+        '<td style="padding:9px 12px;font-weight:500">'+ds+'</td>'+
+        '<td style="padding:9px 8px;text-align:center;color:#5a7a9a">'+h.total_chamados+' chamado'+(h.total_chamados!==1?'s':'')+'</td>'+
+        '<td style="padding:9px 8px;text-align:right;font-family:monospace;font-weight:600;color:#1a7a4a">'+fmt(h.total_geral)+'</td>'+
+        '<td style="padding:9px 8px;text-align:center">'+
+          '<button onclick="verHistPDF('+i+')" style="background:#e67e22;color:#fff;border:none;border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer">📄 Ver PDF</button>'+
+        '</td>'+
+      '</tr>';
+    });
+    html+='</tbody></table>';
+    cont.innerHTML=html;
+  }
+  document.getElementById('ovHist').classList.add('show');
+}
+
+function verHistPDF(i){
+  if(!hist[i])return;
+  var d=new Date(hist[i].gerado_em);
+  var ds=d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  var snap=hist[i].snapshot||[];
+  imprimirPDF(buildPDFHTML(snap,ds));
+}
+
+function exportCSV(){
+  var h=['Data','Chamado','Cliente','KM','Descricao','Tempo','Estac','Pecas','Tot.KM','Tot.Servico','Tot.Extra','Total'];
+  var lines=[h.join(';')];
+  rows.forEach(function(row){
+    var df=row.data_chamado?new Date(row.data_chamado+'T12:00:00').toLocaleDateString('pt-BR'):'';
+    var th=row.tempo_horas?horasParaHHMM(+row.tempo_horas):'';
+    lines.push([df,row.numero_chamado||'',row.cliente||'',row.km_ida_volta||0,(row.descricao||'').replace(/;/g,','),th,row.estacionamento||0,row.pecas||0,cKm(row).toFixed(2),cSvc(row).toFixed(2),cExt(row).toFixed(2),cTot(row).toFixed(2)].join(';'));
+  });
+  lines.push(['TOTAL','','','','','','','','','','',rows.reduce(function(s,r){return s+cTot(r);},0).toFixed(2)].join(';'));
+  var blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8;'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='chamados_'+PREST.replace(/\s+/g,'_')+'.csv';a.click();
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purificatta — Acesso</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--az:#1F497D;--azc:#2E75B6;--azf:#DCE6F1;--tx:#1a2e45;--tl:#5a7a9a;--vm:#c0392b;--border:#d8e4f0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#1F497D 0%,#2E75B6 50%,#4a9fd4 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.2);width:100%;max-width:420px;overflow:hidden}
+.card-top{padding:36px 36px 28px;text-align:center;border-bottom:1px solid var(--border)}
+.card-top h1{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--az);margin-bottom:4px}
+.card-top p{font-size:13px;color:var(--tl)}
+.card-body{padding:32px 36px;display:flex;flex-direction:column;gap:18px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12px;font-weight:600;color:var(--tx);text-transform:uppercase;letter-spacing:.5px}
+.field input{border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--tx);outline:none;transition:all .15s}
+.field input:focus{border-color:var(--azc);box-shadow:0 0 0 3px rgba(46,117,182,.1)}
+.btn-login{background:var(--az);color:#fff;border:none;border-radius:10px;padding:14px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .15s;width:100%}
+.btn-login:hover{background:var(--azc);transform:translateY(-1px);box-shadow:0 4px 16px rgba(31,73,125,.3)}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.err{color:var(--vm);font-size:13px;text-align:center;min-height:18px}
+.card-footer{padding:16px 36px;background:#f7fafd;border-top:1px solid var(--border);text-align:center;font-size:11px;color:var(--tl)}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="card-top">
+    <h1>Purificatta</h1>
+    <p>Sistema de Controle de Chamados</p>
+  </div>
+  <div class="card-body">
+    <div class="field">
+      <label>E-mail / Login</label>
+      <input type="email" id="email" placeholder="seu@email.com" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" id="senha" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <p class="err" id="err"></p>
+    <button class="btn-login" id="btnLogin" onclick="doLogin()">Entrar</button>
+  </div>
+  <div class="card-footer">Purificatta Ind. Com. e Serviços de Purificação de Água Ltda.</div>
+</div>
+<script>
+// If already logged in, redirect
+var token = localStorage.getItem('puri_token');
+var role = localStorage.getItem('puri_role');
+if(token && role){
+  window.location.href = role==='admin' ? '/admin.html' : '/prestador.html';
+}
+
+async function doLogin(){
+  var email=document.getElementById('email').value.trim();
+  var senha=document.getElementById('senha').value;
+  var btn=document.getElementById('btnLogin');
+  var err=document.getElementById('err');
+  err.textContent='';
+  if(!email||!senha){err.textContent='Preencha e-mail e senha';return;}
+  btn.disabled=true;btn.textContent='Entrando...';
+  try{
+    var r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:senha})});
+    var d=await r.json();
+    if(d.error){err.textContent=d.error;btn.disabled=false;btn.textContent='Entrar';return;}
+    localStorage.setItem('puri_token',d.token);
+    localStorage.setItem('puri_role',d.role);
+    localStorage.setItem('puri_nome',d.nome);
+    if(d.prestadorId) localStorage.setItem('puri_prestador_id',d.prestadorId);
+    window.location.href = d.role==='admin' ? '/admin.html' : '/prestador.html';
+  }catch(e){
+    err.textContent='Erro de conexão. Tente novamente.';
+    btn.disabled=false;btn.textContent='Entrar';
+  }
+}
+</script>
+</body>
+</html>
