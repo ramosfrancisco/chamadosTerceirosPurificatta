@@ -509,14 +509,29 @@ if(localStorage.getItem('puri_theme')==='dark'){document.body.classList.add('dar
 document.getElementById('show-url').textContent = window.location.origin;
 
 function api(path, opts){
-  return fetch(path, Object.assign({headers:{'Content-Type':'application/json','Authorization':'Bearer '+TOKEN}}, opts))
+  var headers={'Content-Type':'application/json','Authorization':'Bearer '+TOKEN};
+  if(opts && opts.headers) headers=Object.assign(headers,opts.headers);
+  return fetch(path, Object.assign({},opts,{headers:headers}))
     .then(function(r){
-      if(r.status===401){sair();return;}
-      return r.json();
-    });
+      if(r.status===401){sair();return Promise.resolve(null);}
+      if(!r.ok){
+        return r.text().then(function(t){
+          console.error('API error '+r.status+' on '+path+': '+t);
+          T('Erro '+r.status+': '+path);
+          return null;
+        });
+      }
+      return r.json().catch(function(e){console.error('JSON parse error:',e);return null;});
+    })
+    .catch(function(e){console.error('Fetch error on '+path+':',e);T('Erro de conexão');return null;});
 }
 function apiForm(path, formData, method){
-  return fetch(path, {method:method||'POST',headers:{'Authorization':'Bearer '+TOKEN},body:formData}).then(function(r){return r.json();});
+  return fetch(path, {method:method||'POST',headers:{'Authorization':'Bearer '+TOKEN},body:formData})
+    .then(function(r){
+      if(r.status===401){sair();return null;}
+      return r.json().catch(function(){return null;});
+    })
+    .catch(function(e){console.error('apiForm error:',e);T('Erro ao enviar');return null;});
 }
 
 function sair(){localStorage.clear();window.location.href='/';}
@@ -542,8 +557,9 @@ function go(id){
 
 // ── DASHBOARD ──
 function loadDashboard(){
+  console.log('Loading dashboard, token:', TOKEN ? TOKEN.substring(0,20)+'...' : 'MISSING');
   api('/api/admin/dashboard').then(function(d){
-    if(!d)return;
+    if(!d){console.error('Dashboard returned null');return;}
     document.getElementById('dPrest').textContent=d.prestadores_ativos||0;
     document.getElementById('dChamMes').textContent=d.chamados_mes||0;
     document.getElementById('dChamTotal').textContent=d.total_chamados||0;
