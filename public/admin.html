@@ -64,9 +64,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 .stat{background:var(--card);border-radius:12px;padding:18px 20px;border:1px solid var(--border);position:relative;overflow:hidden}
 .stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
 .stat.c1::before{background:var(--az)}.stat.c2::before{background:var(--vd)}.stat.c3::before{background:var(--or)}.stat.c4::before{background:#4a9fd4}
-.stat label{font-size:10px;font-weight:600;color:var(--tl);text-transform:uppercase;letter-spacing:.6px;display:block;margin-bottom:8px}
-.stat .val{font-family:'DM Mono',monospace;font-size:26px;font-weight:500;color:var(--az);line-height:1}
-.stat .sub{font-size:11px;color:var(--tl);margin-top:5px}
+.stat label{font-size:10px;font-weight:600;color:var(--tl);text-transform:uppercase;letter-spacing:.6px;display:block;margin-bottom:8px;opacity:.85}
+.stat .val{font-family:'DM Mono',monospace;font-size:26px;font-weight:500;color:var(--tx);line-height:1}
+.stat .sub{font-size:11px;color:var(--tl);margin-top:5px;opacity:.8}
 
 /* TABLE */
 table{width:100%;border-collapse:collapse}
@@ -202,6 +202,9 @@ body.dark .upbox{background:#1a2e45;border-color:var(--border)}
 body.dark .mbox{background:#162030;color:var(--tx)}
 body.dark .mbox .field input{background:#1a2e45;color:var(--tx)}
 body.dark .stat{background:var(--card)}
+body.dark .stat .val{color:#e2eaf3}
+body.dark .stat label{color:#8aa8c4}
+body.dark .stat .sub{color:#8aa8c4}
 body.dark .chart-wrap{background:var(--card)}
 body.dark .info-box{background:#1a2e45;border-color:var(--border)}
 body.dark .cc-add input{background:#1a2e45;color:var(--tx);border-color:var(--border)}
@@ -711,9 +714,9 @@ function removeCC(btn){btn.parentElement.remove();}
 var MONTHS=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 var PRESTS=[
   {nome:'João Marcos',cor:'#1F497D',data:[820,950,1050,980,920,1195,0,0,0,0,0,0]},
-  {nome:'Carlos Alberto',cor:'#2E75B6',data:[640,700,720,680,810,915,0,0,0,0,0,0]},
-  {nome:'Ricardo Pereira',cor:'#4a9fd4',data:[700,780,850,920,870,1135,0,0,0,0,0,0]},
-  {nome:'Fernanda Santos',cor:'#8ecae6',data:[400,450,480,520,490,575,0,0,0,0,0,0]},
+  {nome:'Carlos Alberto',cor:'#27ae60',data:[640,700,720,680,810,915,0,0,0,0,0,0]},
+  {nome:'Ricardo Pereira',cor:'#e67e22',data:[700,780,850,920,870,1135,0,0,0,0,0,0]},
+  {nome:'Fernanda Santos',cor:'#9b59b6',data:[400,450,480,520,490,575,0,0,0,0,0,0]},
 ];
 
 function drawChart(){
@@ -732,11 +735,12 @@ function drawChart(){
   var totals=[]; for(var m=0;m<nM;m++){var t=0;PRESTS.forEach(function(p){t+=p.data[m];});totals.push(t);}
   var maxV=Math.max.apply(null,totals)*1.2||1000;
   // Grid
-  ctx.strokeStyle='#e8eef5'; ctx.lineWidth=1;
+  var isDark=document.body.classList.contains('dark');
+  ctx.strokeStyle=isDark?'#1e3148':'#e8eef5'; ctx.lineWidth=1;
   for(var i=0;i<=4;i++){
     var gy=pad.t+cH*(1-i/4);
     ctx.beginPath();ctx.moveTo(pad.l,gy);ctx.lineTo(pad.l+cW,gy);ctx.stroke();
-    ctx.fillStyle='#8aa0b8';ctx.font='10px sans-serif';ctx.textAlign='right';
+    ctx.fillStyle=isDark?'#6a8aaa':'#8aa0b8';ctx.font='10px sans-serif';ctx.textAlign='right';
     var lv=Math.round(maxV*i/4);
     ctx.fillText(lv>=1000?'R$'+(lv/1000).toFixed(1)+'k':'R$'+lv,pad.l-4,gy+3);
   }
@@ -756,15 +760,15 @@ function drawChart(){
     });
     if(totals[m]>0){
       var topY=pad.t+cH*(1-totals[m]/maxV);
-      ctx.fillStyle='#1a2e45';ctx.font='bold 10px sans-serif';ctx.textAlign='center';
+      ctx.fillStyle=isDark?'#e2eaf3':'#1a2e45';ctx.font='bold 10px sans-serif';ctx.textAlign='center';
       ctx.fillText(totals[m]>=1000?'R$'+(totals[m]/1000).toFixed(1)+'k':'R$'+totals[m],x,topY-4);
     }
-    ctx.fillStyle='#5a7a9a';ctx.font='11px sans-serif';ctx.textAlign='center';
+    ctx.fillStyle=isDark?'#8aa8c4':'#5a7a9a';ctx.font='11px sans-serif';ctx.textAlign='center';
     ctx.fillText(months[m],x,pad.t+cH+20);
   }
   // Legend
   document.getElementById('chartLegend').innerHTML=PRESTS.map(function(p){
-    return '<div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#5a7a9a"><span style="width:10px;height:10px;border-radius:2px;background:'+p.cor+';display:inline-block;flex-shrink:0"></span>'+p.nome+'</div>';
+    return '<div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--tl)"><span style="width:10px;height:10px;border-radius:2px;background:'+p.cor+';display:inline-block;flex-shrink:0"></span>'+p.nome+'</div>';
   }).join('');
   // Horizontal bars
   var maxY=Math.max.apply(null,PRESTS.map(function(p){return p.data.reduce(function(a,b){return a+b;},0);}));
