@@ -772,10 +772,14 @@ function drawChart(){
   }).join('');
   // Horizontal bars
   var maxY=Math.max.apply(null,PRESTS.map(function(p){return p.data.reduce(function(a,b){return a+b;},0);}));
+  var dk=document.body.classList.contains('dark');
+  var nc=dk?'#e2eaf3':'#1a2e45';
+  var vc=dk?'#4ade80':'#1a7a4a';
+  var bg=dk?'#1a2e45':'#f0f4f9';
   document.getElementById('barChart').innerHTML=PRESTS.map(function(p){
     var tot=p.data.reduce(function(a,b){return a+b;},0);
     var pct=Math.round(tot/maxY*100);
-    return '<div style="margin-bottom:13px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><span style="font-size:12px;font-weight:500;color:#1a2e45">'+p.nome+'</span><span style="font-family:monospace;font-size:12px;font-weight:700;color:#1a7a4a">R$ '+tot.toLocaleString('pt-BR')+'</span></div><div style="background:#f0f4f9;border-radius:4px;height:7px;overflow:hidden"><div style="background:'+p.cor+';height:100%;width:'+pct+'%;border-radius:4px"></div></div></div>';
+    return '<div style="margin-bottom:13px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><span style="font-size:12px;font-weight:500;color:'+nc+'">'+p.nome+'</span><span style="font-family:monospace;font-size:12px;font-weight:700;color:'+vc+'">R$ '+tot.toLocaleString('pt-BR')+'</span></div><div style="background:'+bg+';border-radius:4px;height:7px;overflow:hidden"><div style="background:'+p.cor+';height:100%;width:'+pct+'%;border-radius:4px"></div></div></div>';
   }).join('');
 }
 
