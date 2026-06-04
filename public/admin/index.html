@@ -6,12 +6,26 @@
 <title>Purificatta – Painel Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--az:#1F497D;--azc:#2E75B6;--azf:#DCE6F1;--ci:#F4F7FB;--cb:#C9D9ED;--tx:#1a2e45;--tl:#5a7a9a;--vd:#1a7a4a;--vm:#c0392b;--or:#e67e22;--bg:#eef3f9}
+/* ── TEMA ── */
+:root {
+  --az:#1F497D; --azc:#2E75B6; --azf:#DCE6F1; --ci:#F4F7FB; --cb:#C9D9ED;
+  --tx:#1a2e45; --tl:#5a7a9a; --vd:#1a7a4a; --vm:#c0392b; --or:#e67e22;
+  --bg:#eef3f9; --card:#ffffff; --border:#d8e4f0; --input-bg:#ffffff;
+  --input-border:#C9D9ED; --shadow:rgba(31,73,125,.08);
+  --topbar-bg:#1F497D; --table-head:#DCE6F1; --row-hover:#f8fbff;
+}
+[data-theme="dark"] {
+  --az:#4a9fd4; --azc:#5aaee0; --azf:#1a2e45; --ci:#1e2d3d; --cb:#2a3f55;
+  --tx:#d4e6f5; --tl:#7aabcc; --vd:#3dbb77; --vm:#e05c4a; --or:#e8943a;
+  --bg:#111c27; --card:#18283a; --border:#2a3f55; --input-bg:#1e2d3d;
+  --input-border:#2a3f55; --shadow:rgba(0,0,0,.35);
+  --topbar-bg:#0d1a27; --table-head:#1a2e45; --row-hover:#1e2d3d;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
 /* LOGIN */
 #loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-.login-card{background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(31,73,125,.15);width:100%;max-width:400px;overflow:hidden}
+.login-card{background:var(--card);border-radius:16px;box-shadow:0 8px 40px rgba(31,73,125,.15);width:100%;max-width:400px;overflow:hidden}
 .login-header{background:var(--az);padding:32px;text-align:center}
 .login-header h1{font-size:20px;font-weight:600;color:#fff;margin-bottom:4px}
 .login-header p{font-size:13px;color:rgba(255,255,255,.6)}
@@ -36,7 +50,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 .br{background:var(--vm);color:#fff}.br:hover{background:#a93226}
 .bo{background:var(--or);color:#fff}.bo:hover{background:#d35400}
 /* NAV */
-.nav{background:#fff;border-bottom:1px solid var(--cb);padding:0 28px;display:flex;gap:0}
+.nav{background:var(--card);border-bottom:1px solid var(--cb);padding:0 28px;display:flex;gap:0}
 .nav-tab{padding:14px 20px;font-size:13px;font-weight:500;color:var(--tl);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
 .nav-tab.active{color:var(--az);border-bottom-color:var(--az)}
 .nav-tab:hover{color:var(--az)}
@@ -44,16 +58,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 .content{flex:1;padding:28px;max-width:1400px;margin:0 auto;width:100%}
 /* STATS */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px}
-.stat-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(31,73,125,.08)}
+.stat-card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(31,73,125,.08)}
 .stat-card label{font-size:11px;font-weight:600;color:var(--tl);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
 .stat-card span{font-family:'DM Mono',monospace;font-size:26px;font-weight:600;color:var(--az)}
 /* CARDS */
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .section-header h2{font-size:16px;font-weight:600;color:var(--tx)}
 .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.filters select,.filters input{border:1.5px solid var(--cb);border-radius:7px;padding:7px 10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx);outline:none;background:#fff}
+.filters select,.filters input{border:1.5px solid var(--cb);border-radius:7px;padding:7px 10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx);outline:none;background:var(--card)}
 /* TABLE */
-.table-wrap{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(31,73,125,.08);overflow:hidden}
+.table-wrap{background:var(--card);border-radius:12px;box-shadow:0 2px 8px rgba(31,73,125,.08);overflow:hidden}
 table{width:100%;border-collapse:collapse}
 thead th{background:var(--azf);padding:11px 12px;font-size:11px;font-weight:600;color:var(--az);text-transform:uppercase;letter-spacing:.5px;text-align:left;border-bottom:2px solid var(--cb)}
 tbody tr{border-bottom:1px solid #edf2f8;transition:background .1s}
@@ -67,16 +81,59 @@ tbody td{padding:11px 12px;font-size:13px;vertical-align:middle}
 /* OVERLAY */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px}
 .overlay.show{display:flex}
-.modal{background:#fff;border-radius:14px;padding:28px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal{background:var(--card);border-radius:14px;padding:28px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
 .modal h3{font-size:16px;font-weight:600;color:var(--az);margin-bottom:20px}
 .modal-fields{display:flex;flex-direction:column;gap:14px}
 .rates-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
-.link-box{background:var(--ci);border:1px solid var(--cb);border-radius:8px;padding:10px 14px;font-family:'DM Mono',monospace;font-size:12px;color:var(--tx);word-break:break-all}
+.link-box{background:var(--ci);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'DM Mono',monospace;font-size:12px;color:var(--tx);word-break:break-all}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--az);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s}
 .toast.show{transform:translateY(0);opacity:1}
 .empty{text-align:center;padding:48px;color:var(--tl);font-size:14px}
+
+[data-theme="dark"] body{background:var(--bg);color:var(--tx)}
+[data-theme="dark"] .login-card,[data-theme="dark"] .modal{background:var(--card)}
+[data-theme="dark"] .login-header{background:var(--topbar-bg)}
+[data-theme="dark"] .field input,[data-theme="dark"] .field select,[data-theme="dark"] .field textarea{background:var(--input-bg);border-color:var(--input-border);color:var(--tx)}
+[data-theme="dark"] .topbar{background:var(--topbar-bg)}
+[data-theme="dark"] .nav{background:var(--card);border-color:var(--border)}
+[data-theme="dark"] .nav-tab{color:var(--tl)}
+[data-theme="dark"] .nav-tab.active{color:var(--az);border-bottom-color:var(--az)}
+[data-theme="dark"] .table-wrap{background:var(--card)}
+[data-theme="dark"] thead th{background:var(--table-head);color:var(--az);border-color:var(--border)}
+[data-theme="dark"] tbody tr{border-color:var(--border)}
+[data-theme="dark"] tbody tr:hover{background:var(--row-hover)}
+[data-theme="dark"] tbody td{color:var(--tx)}
+[data-theme="dark"] .stat-card{background:var(--card)}
+[data-theme="dark"] .stat-card span{color:var(--az)}
+[data-theme="dark"] .link-box{background:var(--ci);border-color:var(--border);color:var(--tx)}
+[data-theme="dark"] .filters select,[data-theme="dark"] .filters input{background:var(--input-bg);border-color:var(--border);color:var(--tx)}
+[data-theme="dark"] .badge-green{background:#1a3828;color:var(--vd)}
+[data-theme="dark"] .badge-red{background:#2d1515;color:var(--vm)}
+[data-theme="dark"] #totalRodape{background:#0d1a27}
+[data-theme="dark"] .overlay .modal{background:var(--card);color:var(--tx)}
+.theme-toggle{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:20px;padding:5px 12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:background .15s}
+.theme-toggle:hover{background:rgba(255,255,255,.25)}
+
+* {transition:background-color .2s,color .2s,border-color .2s}
 </style>
+<script>
+(function(){
+  var s=localStorage.getItem('puri_theme');
+  var d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.setAttribute('data-theme',s||(d?'dark':'light'));
+})();
+function toggleTheme(){
+  var t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('puri_theme',t);
+  document.querySelectorAll('.theme-toggle').forEach(function(b){b.innerHTML=t==='dark'?'&#9728;&#65039; Claro':'&#127769; Escuro';});
+}
+function initThemeBtn(){
+  var isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.querySelectorAll('.theme-toggle').forEach(function(b){b.innerHTML=isDark?'&#9728;&#65039; Claro':'&#127769; Escuro';});
+}
+</script>
 </head>
 <body>
 
@@ -103,7 +160,7 @@ tbody td{padding:11px 12px;font-size:13px;vertical-align:middle}
     <div class="topbar-right">
       <span id="adminNome"></span>
       <button class="btn-sm bw" onclick="showTab('tabSenha')">🔑 Senha</button>
-      <button class="btn-sm bw" onclick="doLogout()">Sair</button>
+      <button class="btn-sm bw" onclick="doLogout()">Sair</button><button class="theme-toggle" onclick="toggleTheme()">🌙 Escuro</button>
     </div>
   </div>
   <div class="nav">
@@ -171,7 +228,7 @@ tbody td{padding:11px 12px;font-size:13px;vertical-align:middle}
     <div id="tabSenha" style="display:none">
       <div style="max-width:400px">
         <div class="section-header"><h2>Alterar Senha</h2></div>
-        <div style="background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(31,73,125,.08)">
+        <div style="background:var(--card);border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(31,73,125,.08)">
           <div class="modal-fields">
             <div class="field"><label>Senha Atual</label><input type="password" id="senhaAtual"></div>
             <div class="field"><label>Nova Senha</label><input type="password" id="senhaNova"></div>
@@ -276,7 +333,7 @@ async function alterarSenha(){
 }
 
 // ── MAIN ──
-function mostrarMain(){
+function mostrarMain(){ initThemeBtn();
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('mainScreen').style.display='flex';
   document.getElementById('adminNome').textContent=adminNome;
@@ -477,7 +534,7 @@ function exportChamadosCSV(){
 function fecharModal(id){document.getElementById(id).classList.remove('show');}
 
 // ── INIT ──
-if(token){mostrarMain();}
+initThemeBtn(); if(token){mostrarMain();}
 </script>
 </body>
 </html>
