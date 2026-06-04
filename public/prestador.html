@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Purificatta — Tabela de Chamados</title>
+<script>
+(function(){
+  var token=localStorage.getItem('puri_token');
+  var role=localStorage.getItem('puri_role');
+  if(!token||role!=='prestador'){localStorage.clear();window.location.href='/';}
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--az:#1F497D;--azc:#2E75B6;--azf:#DCE6F1;--ci:#F4F7FB;--cb:#C9D9ED;--tx:#1a2e45;--tl:#5a7a9a;--vd:#1a7a4a;--vm:#c0392b;--or:#e67e22;--bg:#eef3f9;--card:#fff;--border:#d8e4f0}
