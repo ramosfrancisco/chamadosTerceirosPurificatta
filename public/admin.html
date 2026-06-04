@@ -28,10 +28,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 .sb-logo h1{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:#fff;letter-spacing:-.5px}
 .sb-logo p{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
 .sb-nav{flex:1;padding:12px 0;overflow-y:auto}
-.ni{display:flex;align-items:center;gap:10px;padding:11px 20px;font-size:13px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;border-left:3px solid transparent;user-select:none}
+.ni{display:flex;align-items:center;gap:10px;padding:11px 20px;font-size:13px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;border-left:3px solid transparent;user-select:none;line-height:1}
 .ni:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.06)}
 .ni.active{color:#fff;background:rgba(255,255,255,.13);border-left-color:#7dd3fc}
-.ni .ic{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.ni .ic{font-size:15px;width:20px;text-align:center;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center}
 .sb-foot{padding:14px 20px;border-top:1px solid rgba(255,255,255,.1)}
 .sb-foot strong{display:block;font-size:13px;color:rgba(255,255,255,.8);margin-bottom:1px}
 .sb-foot span{font-size:11px;color:rgba(255,255,255,.4)}
@@ -187,6 +187,29 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 .cc-add{display:flex;gap:7px;align-items:center;margin-top:8px}
 .cc-add input{flex:1;border:1.5px solid var(--border);border-radius:7px;padding:7px 11px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
 .cc-add input:focus{border-color:var(--azc)}
+
+/* ── DARK MODE ── */
+body.dark{
+  --az:#4a9fd4;--azc:#5fb3e8;--azf:#1a2e45;
+  --tx:#e2eaf3;--tl:#8aa8c4;--vd:#4ade80;--vm:#f87171;--or:#fb923c;
+  --bg:#0f1923;--card:#162030;--border:#1e3148;--hover:#1a2e45;
+}
+body.dark .sb{background:#0d1620}
+body.dark .topbar{background:#162030}
+body.dark thead th{background:#1a2e45}
+body.dark .field input,body.dark .field select{background:#1a2e45;color:var(--tx);border-color:var(--border)}
+body.dark .upbox{background:#1a2e45;border-color:var(--border)}
+body.dark .mbox{background:#162030;color:var(--tx)}
+body.dark .mbox .field input{background:#1a2e45;color:var(--tx)}
+body.dark .stat{background:var(--card)}
+body.dark .chart-wrap{background:var(--card)}
+body.dark .info-box{background:#1a2e45;border-color:var(--border)}
+body.dark .cc-add input{background:#1a2e45;color:var(--tx);border-color:var(--border)}
+body.dark .card-box{background:var(--card)}
+body.dark .ic{background:var(--card)}
+body.dark .det-hd{background:var(--card)}
+body.dark select{background:#1a2e45;color:var(--tx);border-color:var(--border)}
+body.dark tbody tr:hover{background:#1a2e45}
 </style>
 </head>
 <body>
@@ -207,7 +230,8 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 <div class="main">
   <div class="topbar">
     <span class="topbar-title" id="ttitle">Dashboard</span>
-    <div class="topbar-r">
+    <div class="topbar-r" style="display:flex;align-items:center;gap:8px">
+      <button class="btn bgh bsm" id="btnTheme" onclick="toggleTheme()" title="Alternar tema">🌙 Escuro</button>
       <button class="btn bgh bsm" onclick="T('Saindo...')">Sair</button>
     </div>
   </div>
@@ -750,6 +774,20 @@ function drawChart(){
     return '<div style="margin-bottom:13px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><span style="font-size:12px;font-weight:500;color:#1a2e45">'+p.nome+'</span><span style="font-family:monospace;font-size:12px;font-weight:700;color:#1a7a4a">R$ '+tot.toLocaleString('pt-BR')+'</span></div><div style="background:#f0f4f9;border-radius:4px;height:7px;overflow:hidden"><div style="background:'+p.cor+';height:100%;width:'+pct+'%;border-radius:4px"></div></div></div>';
   }).join('');
 }
+
+function toggleTheme(){
+  var isDark=document.body.classList.toggle('dark');
+  localStorage.setItem('puri_theme',isDark?'dark':'light');
+  document.getElementById('btnTheme').textContent=isDark?'☀️ Claro':'🌙 Escuro';
+}
+// Apply saved theme on load
+(function(){
+  if(localStorage.getItem('puri_theme')==='dark'){
+    document.body.classList.add('dark');
+    var btn=document.getElementById('btnTheme');
+    if(btn) btn.textContent='☀️ Claro';
+  }
+})();
 
 function T(msg){
   var t=document.getElementById('toastEl');
