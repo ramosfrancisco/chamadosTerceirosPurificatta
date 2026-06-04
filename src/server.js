@@ -226,12 +226,13 @@ app.get('/api/chamados', authAny, async (req, res) => {
     let pid = prestador_id;
     if (req.user.role === 'prestador') pid = req.user.id;
 
-    let query = `SELECT c.*,
+    let query = `SELECT c.*, p.nome as prestador_nome,
       ROUND((c.km_ida_volta * p.valor_km)::numeric,2) as total_km,
       ROUND((c.tempo_horas * p.valor_hora)::numeric,2) as total_servico,
       ROUND((c.estacionamento + c.pecas)::numeric,2) as total_extra,
       ROUND((c.km_ida_volta*p.valor_km + c.tempo_horas*p.valor_hora + c.estacionamento + c.pecas)::numeric,2) as total
-      FROM chamados c JOIN prestadores p ON p.id=c.prestador_id WHERE 1=1`;
+      FROM chamados c JOIN prestadores p ON p.id=c.prestador_id WHERE 1=1
+      -- include prestador nome`;
     const params = [];
     let i = 1;
     if (pid) { query += ` AND c.prestador_id=$${i++}`; params.push(pid); }
