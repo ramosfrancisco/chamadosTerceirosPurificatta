@@ -177,7 +177,6 @@ app.put('/api/prestadores/:id', authAdmin, upload.fields([{ name: 'doc_contrato'
     const contrato = files.doc_contrato?.[0];
     const tabela = files.doc_tabela?.[0];
 
-    // Get existing for file paths
     const { rows: ex } = await db.query('SELECT * FROM prestadores WHERE id=$1', [req.params.id]);
     if (!ex[0]) return res.status(404).json({ error: 'Não encontrado' });
 
@@ -260,7 +259,6 @@ app.post('/api/chamados', authAny, async (req, res) => {
 app.put('/api/chamados/:id', authAny, async (req, res) => {
   try {
     const { data_chamado, numero_chamado, cliente, km_ida_volta, descricao, tempo_horas, estacionamento, pecas } = req.body;
-    // Ownership check for prestador
     if (req.user.role === 'prestador') {
       const { rows } = await db.query('SELECT prestador_id,periodo_fechado FROM chamados WHERE id=$1', [req.params.id]);
       if (!rows[0] || rows[0].prestador_id !== req.user.id) return res.status(403).json({ error: 'Sem permissão' });
@@ -321,7 +319,6 @@ app.get('/api/admin/dashboard', authAdmin, async (req, res) => {
         (SELECT COUNT(*) FROM chamados) AS total_chamados,
         (SELECT COUNT(*) FROM chamados WHERE EXTRACT(MONTH FROM data_chamado)=EXTRACT(MONTH FROM NOW()) AND EXTRACT(YEAR FROM data_chamado)=EXTRACT(YEAR FROM NOW())) AS chamados_mes
     `);
-    // Monthly totals for chart (current year)
     const ano = new Date().getFullYear();
     const { rows: chart } = await db.query(`
       SELECT
@@ -362,7 +359,6 @@ app.put('/api/configuracoes', authAdmin, async (req, res) => {
   } catch (err) { res.status(500).json({ error: 'Erro interno' }); }
 });
 
-// POST /api/configuracoes/testar-email — manual trigger
 app.post('/api/configuracoes/testar-email', authAdmin, async (req, res) => {
   try {
     const { mes, ano } = req.body;
@@ -373,7 +369,6 @@ app.post('/api/configuracoes/testar-email', authAdmin, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// GET /api/log-emails
 app.get('/api/log-emails', authAdmin, async (req, res) => {
   try {
     const { rows } = await db.query('SELECT * FROM log_emails ORDER BY enviado_em DESC LIMIT 100');
@@ -381,38 +376,17 @@ app.get('/api/log-emails', authAdmin, async (req, res) => {
   } catch (err) { res.status(500).json({ error: 'Erro interno' }); }
 });
 
-// ── ALIAS: change-password (usado pelo admin frontend) ───────
-app.post('/api/auth/change-password', async (req, res) => {
-  // Reuse /api/admins/minha-senha logic
-  try {
-    const authHeader = req.headers.authorization || '';
-    const token = authHeader.replace('Bearer ', '');
-    if (!token) return res.status(401).json({ error: 'Sem autorização' });
-    const jwt = require('jsonwebtoken');
-    let decoded;
-    try { decoded = jwt.verify(token, process.env.JWT_SECRET); } catch { return res.status(401).json({ error: 'Token inválido' }); }
-    const bcrypt = require('bcryptjs');
-    const { currentPassword, newPassword } = req.body;
-    const { rows } = await db.query('SELECT * FROM admins WHERE id=$1', [decoded.id]);
-    if (!rows[0]) return res.status(404).json({ error: 'Admin não encontrado' });
-    const ok = await bcrypt.compare(currentPassword, rows[0].password_hash);
-    if (!ok) return res.status(401).json({ error: 'Senha atual incorreta' });
-    if (!newPassword || newPassword.length < 6) return res.status(400).json({ error: 'Mínimo 6 caracteres' });
-    const hash = await bcrypt.hash(newPassword, 10);
-    await db.query('UPDATE admins SET password_hash=$1,updated_at=NOW() WHERE id=$2', [hash, decoded.id]);
-    res.json({ ok: true });
-  } catch (err) { console.error(err); res.status(500).json({ error: 'Erro interno' }); }
+// ── SERVE INDEX PARA TUDO QUE NÃO FOR API ──
+app.get('*', (req, res) => {
+  // Se for requisição de API, retorna 404
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'Rota não encontrada' });
+  }
+  // Caso contrário, serve index.html (SPA)
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
-
-// ── SPA ──────────────────────────────────────────────────────
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, '../public/admin/index.html')));
-app.get('/admin/', (req, res) => res.sendFile(path.join(__dirname, '../public/admin/index.html')));
-app.get('/prestador', (req, res) => res.sendFile(path.join(__dirname, '../public/prestador/index.html')));
-app.get('/prestador/', (req, res) => res.sendFile(path.join(__dirname, '../public/prestador/index.html')));
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')));
 
 app.listen(PORT, () => {
   console.log(`Purificatta rodando na porta ${PORT}`);
   iniciarCron();
 });
-
