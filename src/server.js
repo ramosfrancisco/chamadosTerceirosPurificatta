@@ -187,13 +187,13 @@ app.put('/api/prestadores/:id', authAdmin, upload.fields([{ name: 'doc_contrato'
 
     const { rows } = await db.query(`
       UPDATE prestadores SET
-        nome=$1,documento=$2,telefone=$3,email=$4,
-        endereco_rua=$5,endereco_numero=$6,endereco_complemento=$7,endereco_bairro=$8,endereco_cidade=$9,endereco_estado=$10,endereco_cep=$11,
-        valor_km=$12,valor_hora=$13,valor_hig_a=$14,valor_hig_b=$15,valor_inst=$16,valor_trans=$17,
-        doc_contrato_path=$18,doc_contrato_nome=$19,doc_tabela_path=$20,doc_tabela_nome=$21,
-        ativo=$22,updated_at=NOW()
-      WHERE id=$23 RETURNING *`,
-      [b.nome,b.documento||null,b.telefone||null,b.email||null,
+        nome=$1,documento=$2,telefone=$3,email=$4,login=$5,
+        endereco_rua=$6,endereco_numero=$7,endereco_complemento=$8,endereco_bairro=$9,endereco_cidade=$10,endereco_estado=$11,endereco_cep=$12,
+        valor_km=$13,valor_hora=$14,valor_hig_a=$15,valor_hig_b=$16,valor_inst=$17,valor_trans=$18,
+        doc_contrato_path=$19,doc_contrato_nome=$20,doc_tabela_path=$21,doc_tabela_nome=$22,
+        ativo=$23,updated_at=NOW()
+      WHERE id=$24 RETURNING *`,
+      [b.nome,b.documento||null,b.telefone||null,b.email||null,b.login?b.login.toLowerCase():ex[0].login,
        b.endereco_rua||null,b.endereco_numero||null,b.endereco_complemento||null,b.endereco_bairro||null,b.endereco_cidade||null,b.endereco_estado||null,b.endereco_cep||null,
        b.valor_km||0,b.valor_hora||0,b.valor_hig_a||0,b.valor_hig_b||0,b.valor_inst||0,b.valor_trans||0,
        cPath,cNome,tPath,tNome,b.ativo!==false,req.params.id]);
