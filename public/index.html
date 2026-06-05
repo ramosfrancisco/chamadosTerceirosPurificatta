@@ -38,7 +38,10 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#1F497D 
     </div>
     <div class="field">
       <label>Senha</label>
-      <input type="password" id="senha" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <div style="position:relative">
+        <input type="password" id="senha" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" style="padding-right:42px;width:100%">
+        <button type="button" onclick="toggleSenha()" id="eyeBtn" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:#8aa0b8;padding:4px;line-height:1" title="Mostrar/ocultar senha">👁</button>
+      </div>
     </div>
     <p class="err" id="err"></p>
     <button class="btn-login" id="btnLogin" onclick="doLogin()">Entrar</button>
@@ -52,6 +55,12 @@ localStorage.removeItem('puri_role');
 localStorage.removeItem('puri_nome');
 localStorage.removeItem('puri_prestador_id');
 
+function toggleSenha(){
+  var inp=document.getElementById('senha');
+  var btn=document.getElementById('eyeBtn');
+  if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
+  else{inp.type='password';btn.textContent='👁';}
+}
 async function doLogin(){
   var email=document.getElementById('email').value.trim();
   var senha=document.getElementById('senha').value;

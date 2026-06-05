@@ -133,16 +133,16 @@ app.post('/api/admins/minha-senha', authAdmin, async (req, res) => {
 
 // ── PRESTADORES ──────────────────────────────────────────────
 
-app.get('/api/prestadores', authAdmin, async (req, res) => {
+app.get('/api/prestadores', authAny, async (req, res) => {
   try {
-    const { rows } = await db.query(`
-      SELECT p.*,
-        COUNT(c.id) AS total_chamados,
-        COALESCE(SUM((c.km_ida_volta*p.valor_km)+(c.tempo_horas*p.valor_hora)+c.estacionamento+c.pecas),0) AS total_geral
-      FROM prestadores p
-      LEFT JOIN chamados c ON c.prestador_id=p.id
-      GROUP BY p.id ORDER BY p.nome
-    `);
+    let query, params=[];
+    if(req.user.role==='prestador'){
+      query=`SELECT p.*,0 AS total_chamados,0 AS total_geral FROM prestadores p WHERE p.id=$1`;
+      params=[req.user.id];
+    } else {
+      query=`SELECT p.*,COUNT(c.id) AS total_chamados,COALESCE(SUM((c.km_ida_volta*p.valor_km)+(c.tempo_horas*p.valor_hora)+c.estacionamento+c.pecas),0) AS total_geral FROM prestadores p LEFT JOIN chamados c ON c.prestador_id=p.id GROUP BY p.id ORDER BY p.nome`;
+    }
+    const { rows } = await db.query(query, params);
     res.json(rows);
   } catch (err) { res.status(500).json({ error: 'Erro interno' }); }
 });

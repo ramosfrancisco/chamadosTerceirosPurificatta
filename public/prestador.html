@@ -2,171 +2,187 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Purificatta — Tabela de Chamados</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Purificatta — Meus Chamados</title>
 <script>
 (function(){
-  var token=localStorage.getItem('puri_token');
-  var role=localStorage.getItem('puri_role');
-  if(!token||role!=='prestador'){localStorage.clear();window.location.href='/';}
+  var t=localStorage.getItem('puri_token');
+  var r=localStorage.getItem('puri_role');
+  if(!t||r!=='prestador'){localStorage.clear();window.location.href='/';}
 })();
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--az:#1F497D;--azc:#2E75B6;--azf:#DCE6F1;--ci:#F4F7FB;--cb:#C9D9ED;--tx:#1a2e45;--tl:#5a7a9a;--vd:#1a7a4a;--vm:#c0392b;--or:#e67e22;--bg:#eef3f9;--card:#fff;--border:#d8e4f0}
+:root{--az:#1F497D;--azc:#2E75B6;--azf:#DCE6F1;--ci:#F4F7FB;--tx:#1a2e45;--tl:#5a7a9a;--vd:#1a7a4a;--vm:#c0392b;--or:#e67e22;--bg:#eef3f9;--card:#fff;--border:#d8e4f0}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:14px}
+
 /* HEADER */
-.hd{background:var(--az);padding:20px 28px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.hdl h1{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:#fff}
-.hdl p{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px}
-.badge{margin-top:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:7px 14px;display:inline-flex;align-items:center;gap:8px}
-.badge .av{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
-.badge div span{display:block;font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:1px}
-.badge div strong{font-size:14px;color:#fff;font-weight:600}
-.rates{display:flex;gap:7px;flex-wrap:wrap}
-.rtag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:7px;padding:7px 10px}
-.rtag span{display:block;font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.3px;margin-bottom:1px}
-.rtag strong{font-family:'DM Mono',monospace;font-size:12px;color:#fff}
+.hd{background:var(--az);padding:16px 20px}
+.hd-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hd h1{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#fff}
+.hd p{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px}
+.hd-badge{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:7px 12px;display:inline-flex;align-items:center;gap:8px;margin-top:10px}
+.hd-badge .av{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:#fff;flex-shrink:0}
+.hd-badge div span{display:block;font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px}
+.hd-badge div strong{font-size:13px;color:#fff;font-weight:600}
+.rates{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.rtag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:5px 9px}
+.rtag span{display:block;font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.3px}
+.rtag strong{font-family:'DM Mono',monospace;font-size:11px;color:#fff}
+.hd-sair{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:7px;padding:6px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:#fff;cursor:pointer;flex-shrink:0}
+
 /* FILTER BAR */
-.fbar{background:var(--azc);padding:10px 28px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.1)}
-.fbar label{font-size:12px;color:rgba(255,255,255,.8);font-weight:500}
-.fbar select{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:7px;padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:13px;color:#fff;outline:none}
+.fbar{background:var(--azc);padding:9px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fbar label{font-size:12px;color:rgba(255,255,255,.8);font-weight:500;white-space:nowrap}
+.fbar select{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:5px 9px;font-family:'DM Sans',sans-serif;font-size:12px;color:#fff;outline:none}
 .fbar select option{color:var(--tx);background:#fff}
+.saving{font-size:11px;color:rgba(255,255,255,.7);padding:3px 9px;background:rgba(255,255,255,.12);border-radius:20px;display:none;white-space:nowrap}
+
 /* TOOLBAR */
-.tbar{background:var(--azc);padding:8px 28px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .15s}
+.tbar{background:var(--azc);padding:7px 16px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.1)}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
 .bw{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)}.bw:hover{background:rgba(255,255,255,.25)}
 .bg{background:#27ae60;color:#fff}.bg:hover{background:#219a52}
 .bo{background:var(--or);color:#fff}.bo:hover{background:#d35400}
-.br{background:rgba(192,57,43,.85);color:#fff}.br:hover{background:var(--vm)}
-.bh{background:#546e8a;color:#fff}.bh:hover{background:#425669}
-/* TABLE */
-.tw{background:var(--card);overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:980px}
+.bh{background:#546e8a;color:#fff}
+
+/* CLOSED BANNER */
+.closed-banner{display:none;background:#fef3e2;border-bottom:2px solid var(--or);padding:9px 16px;align-items:center;gap:10px;font-size:13px;color:#7d4e00}
+
+/* TABLE WRAPPER */
+.tw{background:var(--card);overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:900px}
 thead tr{background:var(--azf)}
-thead th{padding:11px 7px;font-size:10px;font-weight:600;color:var(--az);text-transform:uppercase;letter-spacing:.5px;text-align:center;border-bottom:2px solid var(--cb);white-space:nowrap}
-thead th.tl{text-align:left;padding-left:14px}
+thead th{padding:10px 6px;font-size:9px;font-weight:700;color:var(--az);text-transform:uppercase;letter-spacing:.5px;text-align:center;border-bottom:2px solid var(--border);white-space:nowrap}
+thead th.tl{text-align:left;padding-left:12px}
 tbody tr{border-bottom:1px solid #edf2f8;transition:background .1s}
 tbody tr:hover{background:#f8fbff}
-tbody td{padding:7px 5px;text-align:center;vertical-align:middle}
-tbody td.tl{padding-left:12px;text-align:left}
-.ci{width:100%;border:1px solid transparent;border-radius:5px;padding:5px 6px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--tx);background:transparent;outline:none;text-align:center;transition:all .15s}
+tbody td{padding:6px 4px;text-align:center;vertical-align:middle}
+tbody td.tl{padding-left:10px;text-align:left}
+
+/* INPUTS */
+.ci{width:100%;border:1px solid transparent;border-radius:5px;padding:5px 5px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--tx);background:transparent;outline:none;text-align:center;transition:all .15s}
 .ci:focus{border-color:var(--azc);background:#f0f6ff}
 .ci.tl{text-align:left}
 .ci.mn{font-family:'DM Mono',monospace}
-.cd{width:100%;border:1px solid transparent;border-radius:5px;padding:5px 6px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--tx);background:transparent;outline:none;resize:none;line-height:1.4;min-height:30px;transition:all .15s}
+.ci:disabled{opacity:.5;cursor:not-allowed}
+.cd{width:100%;border:1px solid transparent;border-radius:5px;padding:5px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--tx);background:transparent;outline:none;resize:none;line-height:1.4;min-height:30px;transition:all .15s}
 .cd:focus{border-color:var(--azc);background:#f0f6ff}
-.ti{width:68px;border:1px solid transparent;border-radius:5px;padding:5px 6px;font-family:'DM Mono',monospace;font-size:12px;color:var(--tx);background:transparent;outline:none;text-align:center;transition:all .15s}
+.cd:disabled{opacity:.5;cursor:not-allowed}
+.ti{width:64px;border:1px solid transparent;border-radius:5px;padding:5px;font-family:'DM Mono',monospace;font-size:12px;color:var(--tx);background:transparent;outline:none;text-align:center;transition:all .15s}
 .ti:focus{border-color:var(--azc);background:#f0f6ff}
-.ti::placeholder{color:#aab;font-size:11px}
-.cc{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--az);padding:5px 7px;background:var(--ci);border-radius:5px;display:inline-block;min-width:76px;text-align:right}
-.tc2{font-family:'DM Mono',monospace;font-size:13px;font-weight:600;color:var(--vd);padding:5px 8px;background:#eaf7f0;border-radius:5px;display:inline-block;min-width:84px;text-align:right}
-.bd{background:none;border:none;cursor:pointer;color:#ccd6e0;font-size:14px;padding:3px 5px;border-radius:4px;transition:all .15s;line-height:1}
+.ti:disabled{opacity:.5;cursor:not-allowed}
+.cc{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--az);padding:4px 6px;background:var(--ci);border-radius:5px;display:inline-block;min-width:72px;text-align:right}
+.tc2{font-family:'DM Mono',monospace;font-size:13px;font-weight:700;color:var(--vd);padding:4px 7px;background:#eaf7f0;border-radius:5px;display:inline-block;min-width:80px;text-align:right}
+.bd{background:none;border:none;cursor:pointer;color:#ccd6e0;font-size:13px;padding:3px 5px;border-radius:4px;transition:all .15s;line-height:1}
 .bd:hover{color:var(--vm);background:#fdecea}
-/* FOOTER TOTALS */
-.ft{background:var(--az);padding:16px 28px;display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+
+/* FOOTER */
+.ft{background:var(--az);padding:14px 16px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
 .ftb{display:flex;flex-direction:column;gap:2px}
-.ftb label{font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px;font-weight:500}
-.ftb span{font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:#fff}
-.ftb.gd span{font-size:20px;color:#7effc1}
-.dv{width:1px;background:rgba(255,255,255,.15);height:34px}
-/* OVERLAYS */
-.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px}
+.ftb label{font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px}
+.ftb span{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:#fff}
+.ftb.gd span{font-size:18px;color:#7effc1}
+.dv{width:1px;background:rgba(255,255,255,.15);height:28px}
+
+/* PDF OVERLAY */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto}
 .ov.show{display:flex}
-.ob{background:var(--card);border-radius:14px;padding:28px;max-width:880px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.oh{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.oh h2{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--az)}
-.ox{background:none;border:none;font-size:22px;cursor:pointer;color:#999;line-height:1}.ox:hover{color:var(--vm)}
-.oa{display:flex;gap:8px;justify-content:flex-end;padding-top:14px;border-top:1px solid var(--azf);margin-top:16px}
-.cov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center}
-.cov.show{display:flex}
-.cb2{background:var(--card);border-radius:12px;padding:26px 28px;max-width:340px;width:90%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.2)}
-.cb2 h3{font-size:15px;font-weight:600;margin-bottom:7px}
-.cb2 p{font-size:12px;color:var(--tl);margin-bottom:20px}
-.cbt{display:flex;gap:8px;justify-content:center}
-/* HIST */
-.hist-row{display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border)}
-.hist-row:last-child{border-bottom:none}
-.hist-row:hover{background:#f7fafd}
-/* PDF content */
-.pdf-info{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;padding:14px;background:var(--azf);border-radius:8px}
-.pdf-info-item label{font-size:10px;font-weight:600;color:var(--az);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:2px}
-.pdf-table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px}
-.pdf-table th{background:var(--az);color:#fff;padding:7px 5px;text-align:center;font-size:9px;text-transform:uppercase}
+.ob{background:var(--card);border-radius:12px;padding:24px;max-width:840px;width:100%;margin:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.oh{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.oh h2{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--az)}
+.ox{background:none;border:none;font-size:20px;cursor:pointer;color:#999}.ox:hover{color:var(--vm)}
+.oa{display:flex;gap:8px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--azf);margin-top:14px;flex-wrap:wrap}
+
+/* HIST OVERLAY */
+.hist-row{display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;gap:10px}
+.hist-row:last-child{border-bottom:none}.hist-row:hover{background:#f7fafd}
+
+/* PDF PRINT */
+.pdf-table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:14px}
+.pdf-table th{background:var(--az);color:#fff;padding:6px 5px;font-size:9px;text-transform:uppercase;text-align:center}
 .pdf-table th:first-child{text-align:left;padding-left:8px}
-.pdf-table td{padding:6px 5px;border-bottom:1px solid #edf2f8;text-align:center;vertical-align:top}
+.pdf-table td{padding:5px;border-bottom:1px solid #edf2f8;text-align:center;vertical-align:top}
 .pdf-table td:first-child{text-align:left;padding-left:8px}
 .pdf-table tr:nth-child(even) td{background:#f8fbff}
-.pdf-table .tot-row td{background:var(--azf)!important;font-weight:600;color:var(--az)}
-.pdf-ft{display:flex;gap:16px;padding:12px 16px;background:var(--az);border-radius:8px;margin-bottom:20px;flex-wrap:wrap}
-.pdf-ft-b{display:flex;flex-direction:column;gap:2px}
-.pdf-ft-b label{font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px}
-.pdf-ft-b span{font-family:'DM Mono',monospace;font-size:13px;color:#fff;font-weight:500}
-.pdf-ft-b.gd span{color:#7effc1;font-size:17px;font-weight:600}
-.sign{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px}
+.pdf-table .tot td{background:var(--azf)!important;font-weight:700;color:var(--az)}
+.pdf-ft{display:flex;gap:14px;padding:11px 14px;background:var(--az);border-radius:7px;margin-bottom:18px;flex-wrap:wrap}
+.pdf-ft-b label{display:block;font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:1px}
+.pdf-ft-b span{font-family:'DM Mono',monospace;font-size:12px;color:#fff;font-weight:500}
+.pdf-ft-b.gd span{color:#7effc1;font-size:16px;font-weight:700}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:32px}
 .sign-l{text-align:center}
 .sign-l div{border-top:1px solid #999;padding-top:6px;font-size:11px;color:var(--tl)}
-/* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--az);color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none}
-.toast.show{transform:translateY(0);opacity:1}
-.saving{font-size:11px;color:rgba(255,255,255,.7);padding:4px 10px;background:rgba(255,255,255,.12);border-radius:20px;display:none}
-@media print{.fbar,.tbar,.bd{display:none!important}body{background:#fff}.ci,.cd,.ti{border:none!important;background:transparent!important}.ft{border-radius:0}}
+
+/* LOADING */
+.loading-bar{background:rgba(255,255,255,.2);height:3px;width:100%;position:relative;overflow:hidden}
+.loading-bar::after{content:'';position:absolute;left:-40%;width:40%;height:100%;background:rgba(255,255,255,.7);animation:load 1s linear infinite}
+@keyframes load{to{left:100%}}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .rates{gap:4px}
+  .rtag{padding:4px 7px}
+  .rtag strong{font-size:10px}
+  .ft{gap:10px}
+  .ftb span{font-size:12px}
+  .ftb.gd span{font-size:15px}
+  .tbar{gap:4px}
+  .btn{padding:5px 8px;font-size:11px}
+}
+@media print{.fbar,.tbar,.bd,.hd-sair{display:none!important}body{background:#fff}.ci,.cd,.ti{border:none!important;background:transparent!important}.ft{border-radius:0}}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="hd">
-  <div class="hdl">
-    <h1>Purificatta — Tabela de Chamados</h1>
-    <p>Ano de Referência: 2026</p>
-    <div class="badge">
-      <div class="av">JM</div>
-      <div><span>Prestador de Serviços</span><strong>João Marcos Silva</strong></div>
+  <div class="hd-top">
+    <div>
+      <h1>Purificatta — Meus Chamados</h1>
+      <p id="hSubtitle">Carregando...</p>
     </div>
+    <button class="hd-sair" onclick="sair()">Sair</button>
   </div>
-  <div class="rates">
-    <div class="rtag"><span>R$/KM</span><strong>R$ 0,75</strong></div>
-    <div class="rtag"><span>Hora Técnica</span><strong>R$ 85,00/h</strong></div>
-    <div class="rtag"><span>Hig. PE/PG/PL</span><strong>R$ 45,00</strong></div>
-    <div class="rtag"><span>Hig. Osmose</span><strong>R$ 65,00</strong></div>
-    <div class="rtag"><span>Inst./Desins.</span><strong>R$ 55,00</strong></div>
-    <div class="rtag"><span>Transp. Máquinas</span><strong>R$ 120,00</strong></div>
+  <div class="hd-badge">
+    <div class="av" id="hdAv">?</div>
+    <div><span>Prestador de Serviços</span><strong id="hdNome">Carregando...</strong></div>
+  </div>
+  <div class="rates" id="hdRates">
+    <div class="loading-bar" style="width:300px;border-radius:4px;margin-top:4px"></div>
   </div>
 </div>
 
-<!-- FILTER BAR -->
 <div class="fbar">
-  <label>Filtrar por:</label>
+  <label>Período:</label>
   <select id="filtAno" onchange="aplicarFiltro()">
     <option value="2026">2026</option>
     <option value="2025">2025</option>
   </select>
   <select id="filtMes" onchange="aplicarFiltro()">
     <option value="">Todos os meses</option>
-    <option value="6" selected>Junho</option>
+    <option value="6">Junho</option>
     <option value="5">Maio</option>
     <option value="4">Abril</option>
     <option value="3">Março</option>
+    <option value="2">Fevereiro</option>
+    <option value="1">Janeiro</option>
   </select>
   <span class="saving" id="savingBadge">⏳ Salvando...</span>
 </div>
 
-<!-- TOOLBAR -->
+<div id="closedBanner" class="closed-banner">
+  <span style="font-size:16px">🔒</span>
+  <strong>Período fechado</strong> — somente leitura. Use o filtro para ver outros meses.
+</div>
+
 <div class="tbar">
   <button class="btn bw" id="btnAddRow" onclick="addRow()">＋ Nova linha</button>
   <button class="btn bo" onclick="abrirPDF()">📄 Gerar PDF</button>
-  <button class="btn bw" onclick="window.print()">🖨 Imprimir</button>
-  <button class="btn bg" onclick="exportCSV()">⬇ Exportar CSV</button>
+  <button class="btn bg" onclick="exportCSV()">⬇ CSV</button>
   <button class="btn bh" onclick="abrirHist()">📋 Histórico</button>
 </div>
 
-<!-- TABLE -->
-<div id="periodoFechadoBanner" style="display:none;background:#fef3e2;border-bottom:2px solid #e67e22;padding:10px 28px;align-items:center;gap:10px;font-size:13px;color:#7d4e00">
-  <span style="font-size:16px">🔒</span>
-  <strong>Período fechado</strong> — chamados somente leitura. Use o filtro para ver outros meses.
-</div>
 <div class="tw">
   <table>
     <thead>
@@ -174,29 +190,30 @@ tbody td.tl{padding-left:12px;text-align:left}
         <th class="tl">Data</th>
         <th>Chamado</th>
         <th>Cliente</th>
-        <th>KM Ida e Volta</th>
-        <th class="tl" style="min-width:160px">Descrição do Serviço</th>
+        <th>KM Ida/Volta</th>
+        <th class="tl" style="min-width:140px">Descrição do Serviço</th>
         <th>Tempo (h:mm)</th>
-        <th>Estacionamento (R$)</th>
+        <th>Estac. (R$)</th>
         <th>Peças (R$)</th>
-        <th>Total KM</th>
-        <th>Total Serviço</th>
-        <th>Total Extra</th>
+        <th>Tot. KM</th>
+        <th>Tot. Serviço</th>
+        <th>Tot. Extra</th>
         <th>Total</th>
         <th></th>
       </tr>
     </thead>
-    <tbody id="tbBody"></tbody>
+    <tbody id="tbBody">
+      <tr><td colspan="13" style="text-align:center;padding:28px;color:var(--tl)">Carregando...</td></tr>
+    </tbody>
   </table>
 </div>
 
-<!-- FOOTER TOTALS -->
 <div class="ft">
   <div class="ftb"><label>Total KM</label><span id="fKm">R$ 0,00</span></div>
   <div class="dv"></div>
   <div class="ftb"><label>Total Serviços</label><span id="fSer">R$ 0,00</span></div>
   <div class="dv"></div>
-  <div class="ftb"><label>Total Extra (Estac. + Peças)</label><span id="fExt">R$ 0,00</span></div>
+  <div class="ftb"><label>Total Extra</label><span id="fExt">R$ 0,00</span></div>
   <div class="dv"></div>
   <div class="ftb gd"><label>Total Geral</label><span id="fTot">R$ 0,00</span></div>
 </div>
@@ -213,87 +230,124 @@ tbody td.tl{padding-left:12px;text-align:left}
   </div>
 </div>
 
-<!-- HISTORICO OVERLAY -->
+<!-- HIST OVERLAY -->
 <div class="ov" id="ovHist">
-  <div class="ob" style="max-width:680px">
+  <div class="ob" style="max-width:640px">
     <div class="oh"><h2>📋 Histórico de Exportações</h2><button class="ox" onclick="fov('ovHist')">×</button></div>
-    <div id="histCont"></div>
-    <div class="oa">
-      <button class="btn bw" style="color:#333;border-color:#ccc" onclick="fov('ovHist')">Fechar</button>
-    </div>
+    <div id="histCont"><div style="text-align:center;color:var(--tl);padding:20px">Carregando...</div></div>
+    <div class="oa"><button class="btn bw" style="color:#333;border-color:#ccc" onclick="fov('ovHist')">Fechar</button></div>
   </div>
 </div>
 
-
-
-<div class="toast" id="toastEl"></div>
-
 <script>
-var R={km:0.75,hora:85,higA:45,higB:65,inst:55,trans:120};
-var PREST='João Marcos Silva';
-var ANO='2026';
-var rows=[];
-var hist=[];
+var TOKEN = localStorage.getItem('puri_token');
+var PRESTADOR_ID = localStorage.getItem('puri_prestador_id');
+var PREST = {};   // full prestador data from API
+var rows = [];    // current view rows (from API)
+var allRows = []; // all rows loaded
 
-function fmt(v){return 'R$ '+(+v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
-function fmtN(v){return (+v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
-function pTime(s){if(!s)return 0;s=s.trim();if(s.indexOf(':')>=0){var p=s.split(':');return(parseInt(p[0])||0)+(parseInt(p[1])||0)/60;}return parseFloat(s)||0;}
+function sair(){localStorage.clear();window.location.href='/';}
+function fmt(v){return 'R$ '+(+v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function fmtN(v){return (+v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function fmtDate(s){if(!s)return '';try{return new Date(s+'T12:00:00').toLocaleDateString('pt-BR');}catch(e){return s;}}
+function pTime(s){if(!s)return 0;s=String(s).trim();if(s.indexOf(':')>=0){var p=s.split(':');return(parseInt(p[0])||0)+(parseInt(p[1]||0)/60);}return parseFloat(s)||0;}
 function hhmm(h){var hh=Math.floor(h);var mm=Math.round((h-hh)*60);return hh+':'+(mm<10?'0':'')+mm;}
 function fov(id){document.getElementById(id).classList.remove('show');}
-function showToast(msg){var t=document.getElementById('toastEl');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2800);}
+function initials(n){if(!n)return '?';var p=n.trim().split(' ');return(p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();}
 
-function addRow(){
-  var id='r'+Date.now();
-  rows.push({id:id,data:'',chamado:'',cliente:'',km:'',desc:'',tempo:'',estac:'',pecas:''});
-  render();
-  setTimeout(function(){var r=document.querySelector('tr[data-id="'+id+'"]');if(r)r.querySelector('input').focus();},50);
+function api(path,opts){
+  return fetch(path,Object.assign({headers:{'Content-Type':'application/json','Authorization':'Bearer '+TOKEN}},opts))
+    .then(function(r){if(r.status===401){sair();return null;}return r.json().catch(function(){return null;});})
+    .catch(function(){return null;});
 }
 
-function delRow(id){rows=rows.filter(function(r){return r.id!==id;});render();}
+// ── LOAD PRESTADOR DATA ──
+function loadPrestador(){
+  api('/api/prestadores').then(function(ps){
+    if(!ps)return;
+    var p=ps.find(function(x){return x.id===PRESTADOR_ID;});
+    if(!p){
+      // Maybe use token info
+      try{var payload=JSON.parse(atob(TOKEN.split('.')[1]));
+        document.getElementById('hdNome').textContent=payload.nome||'Prestador';
+        document.getElementById('hdAv').textContent=initials(payload.nome||'P');
+        document.getElementById('hSubtitle').textContent='Tabela de Chamados';
+      }catch(e){}
+      return;
+    }
+    PREST=p;
+    document.getElementById('hdNome').textContent=p.nome;
+    document.getElementById('hdAv').textContent=initials(p.nome);
+    document.getElementById('hSubtitle').textContent='Tabela de Chamados — Ano '+new Date().getFullYear();
+    document.getElementById('hdRates').innerHTML=[
+      {label:'R$/KM',val:p.valor_km},
+      {label:'Hora Técnica',val:p.valor_hora+'/h'},
+      {label:'Hig. PE/PG/PL',val:p.valor_hig_a},
+      {label:'Hig. Osmose',val:p.valor_hig_b},
+      {label:'Inst./Desins.',val:p.valor_inst},
+      {label:'Transp.',val:p.valor_trans},
+    ].map(function(r){
+      return '<div class="rtag"><span>'+r.label+'</span><strong>'+fmt(r.val)+'</strong></div>';
+    }).join('');
+  });
+}
 
-function render(){
+// ── LOAD CHAMADOS ──
+function loadChamados(){
+  var ano=document.getElementById('filtAno').value||new Date().getFullYear();
+  var mes=document.getElementById('filtMes').value;
+  var url='/api/chamados?prestador_id='+PRESTADOR_ID+'&ano='+ano+(mes?'&mes='+mes:'');
+  document.getElementById('tbBody').innerHTML='<tr><td colspan="13" style="text-align:center;padding:20px;color:var(--tl)">Carregando...</td></tr>';
+  api(url).then(function(cs){
+    if(!cs)cs=[];
+    rows=cs;
+    var isClosed=cs.length>0 && cs.every(function(r){return r.periodo_fechado;});
+    document.getElementById('closedBanner').style.display=isClosed?'flex':'none';
+    document.getElementById('btnAddRow').style.display=isClosed?'none':'inline-flex';
+    render(isClosed);
+  });
+}
+
+function aplicarFiltro(){loadChamados();}
+
+// ── RENDER TABLE ──
+function render(isClosed){
   var tbody=document.getElementById('tbBody');
+  if(!rows.length){
+    tbody.innerHTML='<tr><td colspan="13" style="text-align:center;padding:28px;color:var(--tl)">Nenhum chamado neste período.<br><span style="font-size:12px">Clique em <strong>＋ Nova linha</strong> para adicionar.</span></td></tr>';
+    foot();
+    return;
+  }
   tbody.innerHTML='';
   rows.forEach(function(row){
+    var closed=isClosed||row.periodo_fechado;
+    var dis=closed?'disabled':'';
     var tr=document.createElement('tr');
-    tr.setAttribute('data-id',row.id);
+    tr.setAttribute('data-id',row.id||'');
+    var df=row.data_chamado?row.data_chamado.substring(0,10):'';
+    var tempo=row.tempo_horas?hhmm(parseFloat(row.tempo_horas)):'';
     tr.innerHTML=
-      '<td class="tl"><input class="ci tl" type="date" data-f="data" value="'+(row.data||'')+'" onchange="upd(\''+row.id+'\',this)"></td>'+
-      '<td><input class="ci" type="text" data-f="chamado" placeholder="Nº" value="'+(row.chamado||'')+'" oninput="upd(\''+row.id+'\',this)"></td>'+
-      '<td><input class="ci tl" type="text" data-f="cliente" placeholder="Nome do cliente" value="'+(row.cliente||'')+'" oninput="upd(\''+row.id+'\',this)"></td>'+
-      '<td><input class="ci mn" type="number" data-f="km" placeholder="0" value="'+(row.km||'')+'" min="0" step="0.1" oninput="upd(\''+row.id+'\',this)"></td>'+
-      '<td class="tl"><textarea class="cd" data-f="desc" placeholder="Descreva o serviço realizado..." rows="1" oninput="upd(\''+row.id+'\',this)">'+(row.desc||'')+'</textarea></td>'+
-      '<td><input class="ti" type="text" data-f="tempo" placeholder="0:00" value="'+(row.tempo||'')+'" oninput="upd(\''+row.id+'\',this)"></td>'+
-      '<td><input class="ci mn" type="number" data-f="estac" placeholder="0,00" value="'+(row.estac||'')+'" min="0" step="0.01" oninput="upd(\''+row.id+'\',this)"></td>'+
-      '<td><input class="ci mn" type="number" data-f="pecas" placeholder="0,00" value="'+(row.pecas||'')+'" min="0" step="0.01" oninput="upd(\''+row.id+'\',this)"></td>'+
-      '<td><span class="cc" id="ck'+row.id+'">'+fmt(cKm(row))+'</span></td>'+
-      '<td><span class="cc" id="cs'+row.id+'">'+fmt(cSvc(row))+'</span></td>'+
-      '<td><span class="cc" id="ce'+row.id+'">'+fmt(cExt(row))+'</span></td>'+
-      '<td><span class="tc2" id="ct'+row.id+'">'+fmt(cTot(row))+'</span></td>'+
-      '<td>'+(row.fechado?'<span style="font-size:11px;color:var(--tl)">🔒</span>':'<button class="bd" onclick="delRow(\''+row.id+'\')" title="Remover">✕</button>')+'</td>';
+      '<td class="tl"><input class="ci tl" type="date" value="'+df+'" data-f="data_chamado" '+dis+' onchange="updRow(\''+row.id+'\',this)"></td>'+
+      '<td><input class="ci" type="text" value="'+(row.numero_chamado||'')+'" placeholder="Nº" data-f="numero_chamado" '+dis+' oninput="updRow(\''+row.id+'\',this)"></td>'+
+      '<td><input class="ci tl" type="text" value="'+(row.cliente||'')+'" placeholder="Cliente" data-f="cliente" '+dis+' oninput="updRow(\''+row.id+'\',this)"></td>'+
+      '<td><input class="ci mn" type="number" value="'+(row.km_ida_volta||'')+'" placeholder="0" min="0" step="0.1" data-f="km_ida_volta" '+dis+' oninput="updRow(\''+row.id+'\',this)"></td>'+
+      '<td class="tl"><textarea class="cd" rows="1" placeholder="Descreva o serviço..." data-f="descricao" '+dis+' oninput="updRow(\''+row.id+'\',this)">'+(row.descricao||'')+'</textarea></td>'+
+      '<td><input class="ti" type="text" value="'+tempo+'" placeholder="0:00" data-f="tempo_horas" '+dis+' oninput="updRow(\''+row.id+'\',this)"></td>'+
+      '<td><input class="ci mn" type="number" value="'+(row.estacionamento||'')+'" placeholder="0,00" min="0" step="0.01" data-f="estacionamento" '+dis+' oninput="updRow(\''+row.id+'\',this)"></td>'+
+      '<td><input class="ci mn" type="number" value="'+(row.pecas||'')+'" placeholder="0,00" min="0" step="0.01" data-f="pecas" '+dis+' oninput="updRow(\''+row.id+'\',this)"></td>'+
+      '<td><span class="cc">'+fmt(cKm(row))+'</span></td>'+
+      '<td><span class="cc">'+fmt(cSvc(row))+'</span></td>'+
+      '<td><span class="cc">'+fmt(cExt(row))+'</span></td>'+
+      '<td><span class="tc2">'+fmt(cTot(row))+'</span></td>'+
+      '<td>'+(closed?'<span style="font-size:11px;color:var(--tl)">🔒</span>':'<button class="bd" onclick="delRow(\''+row.id+'\')">✕</button>')+'</td>';
     tbody.appendChild(tr);
   });
   foot();
 }
 
-function upd(id,el){
-  var row=rows.find(function(r){return r.id===id;});if(!row)return;
-  row[el.getAttribute('data-f')]=el.value;
-  document.getElementById('ck'+id).textContent=fmt(cKm(row));
-  document.getElementById('cs'+id).textContent=fmt(cSvc(row));
-  document.getElementById('ce'+id).textContent=fmt(cExt(row));
-  document.getElementById('ct'+id).textContent=fmt(cTot(row));
-  foot();
-  // simulate saving badge
-  var b=document.getElementById('savingBadge');
-  b.style.display='inline-block';
-  clearTimeout(window._st);
-  window._st=setTimeout(function(){b.style.display='none';},1200);
-}
-
-function cKm(r){return(parseFloat(r.km)||0)*R.km;}
-function cSvc(r){return pTime(r.tempo)*R.hora;}
-function cExt(r){return(parseFloat(r.estac)||0)+(parseFloat(r.pecas)||0);}
+function cKm(r){return(parseFloat(r.km_ida_volta)||0)*(parseFloat(PREST.valor_km)||0);}
+function cSvc(r){return pTime(r.tempo_horas)*(parseFloat(PREST.valor_hora)||0);}
+function cExt(r){return(parseFloat(r.estacionamento)||0)+(parseFloat(r.pecas)||0);}
 function cTot(r){return cKm(r)+cSvc(r)+cExt(r);}
 
 function foot(){
@@ -305,185 +359,163 @@ function foot(){
   document.getElementById('fTot').textContent=fmt(st);
 }
 
-
-// All demo data across months
-var allData=[
-  {id:'d1',data:'2026-06-02',chamado:'4821',cliente:'Farmácia Central',km:'42',desc:'Higienização e troca de filtros',tempo:'1:30',estac:'15',pecas:'0',fechado:false},
-  {id:'d2',data:'2026-06-03',chamado:'4835',cliente:'Hotel Bella Vista',km:'68',desc:'Manutenção osmose reversa',tempo:'2:15',estac:'20',pecas:'45',fechado:false},
-  {id:'d3',data:'2026-06-05',chamado:'4852',cliente:'Clínica São Lucas',km:'35',desc:'Instalação de purificador',tempo:'1:00',estac:'0',pecas:'0',fechado:false},
-  {id:'d4',data:'2026-06-08',chamado:'4871',cliente:'Supermercado Bom',km:'55',desc:'Troca de filtro e higienização',tempo:'1:45',estac:'0',pecas:'32',fechado:false},
-  {id:'d5',data:'2026-05-03',chamado:'4710',cliente:'Padaria São José',km:'38',desc:'Higienização PE',tempo:'1:00',estac:'0',pecas:'0',fechado:true},
-  {id:'d6',data:'2026-05-08',chamado:'4724',cliente:'Hotel Central',km:'52',desc:'Troca filtros osmose',tempo:'1:45',estac:'15',pecas:'28',fechado:true},
-  {id:'d7',data:'2026-05-15',chamado:'4739',cliente:'Clínica Vida',km:'45',desc:'Manutenção preventiva',tempo:'2:00',estac:'0',pecas:'0',fechado:true},
-  {id:'d8',data:'2026-04-05',chamado:'4601',cliente:'Supermercado Norte',km:'60',desc:'Instalação purificador',tempo:'1:30',estac:'20',pecas:'0',fechado:true},
-  {id:'d9',data:'2026-04-12',chamado:'4618',cliente:'Farmácia Central',km:'42',desc:'Higienização semestral',tempo:'1:00',estac:'0',pecas:'0',fechado:true},
-];
-
-function aplicarFiltro(){
-  var ano=parseInt(document.getElementById('filtAno').value)||2026;
-  var mes=parseInt(document.getElementById('filtMes').value)||0;
-  rows=allData.filter(function(r){
-    var d=new Date(r.data+'T12:00:00');
-    if(mes===0) return d.getFullYear()===ano;
-    return d.getFullYear()===ano && (d.getMonth()+1)===mes;
-  });
-  var hasFechado=rows.length>0 && rows.every(function(r){return r.fechado;});
-  var banner=document.getElementById('periodoFechadoBanner');
-  banner.style.display=hasFechado?'flex':'none';
-  var addBtn=document.getElementById('btnAddRow');
-  if(addBtn) addBtn.style.display=hasFechado?'none':'inline-flex';
-  render();
+// ── ADD / UPDATE / DELETE ──
+function addRow(){
+  var ano=document.getElementById('filtAno').value||new Date().getFullYear();
+  var mes=document.getElementById('filtMes').value||(new Date().getMonth()+1);
+  var hoje=ano+'-'+String(mes).padStart(2,'0')+'-'+String(new Date().getDate()).padStart(2,'0');
+  api('/api/chamados',{method:'POST',body:JSON.stringify({
+    prestador_id:PRESTADOR_ID,
+    data_chamado:hoje,
+    numero_chamado:'',cliente:'',km_ida_volta:0,descricao:'',tempo_horas:0,estacionamento:0,pecas:0
+  })}).then(function(r){if(r&&r.id){rows.push(r);render(false);setTimeout(function(){var inp=document.querySelector('tr[data-id="'+r.id+'"] input');if(inp)inp.focus();},50);}});
 }
 
-// Init — current month
-rows=allData.filter(function(r){return r.data.startsWith('2026-06');});
-render();
+function updRow(id,el){
+  var row=rows.find(function(r){return r.id===id;});
+  if(!row)return;
+  var f=el.getAttribute('data-f');
+  var v=el.tagName==='TEXTAREA'?el.value:el.value;
+  if(f==='tempo_horas')v=pTime(v);
+  row[f]=v;
+  // Update calculated cells
+  var tr=document.querySelector('tr[data-id="'+id+'"]');
+  if(tr){
+    var cells=tr.querySelectorAll('.cc,.tc2');
+    if(cells[0])cells[0].textContent=fmt(cKm(row));
+    if(cells[1])cells[1].textContent=fmt(cSvc(row));
+    if(cells[2])cells[2].textContent=fmt(cExt(row));
+    if(cells[3])cells[3].textContent=fmt(cTot(row));
+  }
+  foot();
+  // Autosave
+  var b=document.getElementById('savingBadge');b.style.display='inline-block';
+  clearTimeout(window._st);
+  window._st=setTimeout(function(){
+    var body={data_chamado:row.data_chamado,numero_chamado:row.numero_chamado,cliente:row.cliente,km_ida_volta:row.km_ida_volta||0,descricao:row.descricao,tempo_horas:row.tempo_horas||0,estacionamento:row.estacionamento||0,pecas:row.pecas||0};
+    api('/api/chamados/'+id,{method:'PUT',body:JSON.stringify(body)}).then(function(){b.style.display='none';});
+  },1500);
+}
 
-// PDF
-function buildPDFHTML(rws,exportDate){
-  var sk=0,ss=0,se=0,st=0;
-  rws.forEach(function(r){sk+=cKm(r);ss+=cSvc(r);se+=cExt(r);st+=cTot(r);});
-  var tbody='';
-  rws.forEach(function(row,i){
-    var df=row.data?new Date(row.data+'T12:00:00').toLocaleDateString('pt-BR'):'—';
-    tbody+='<tr>'+
-      '<td>'+df+'</td><td>'+(row.chamado||'—')+'</td><td>'+(row.cliente||'—')+'</td>'+
-      '<td style="text-align:center">'+(row.km||'0')+' km</td>'+
-      '<td style="text-align:left;max-width:160px;word-wrap:break-word">'+(row.desc||'—')+'</td>'+
-      '<td style="text-align:center">'+(row.tempo||'—')+'</td>'+
-      '<td style="text-align:right;font-family:monospace">R$ '+(parseFloat(row.estac)||0).toFixed(2).replace('.',',')+'</td>'+
-      '<td style="text-align:right;font-family:monospace">R$ '+(parseFloat(row.pecas)||0).toFixed(2).replace('.',',')+'</td>'+
-      '<td style="text-align:right;font-family:monospace">'+fmtN(cKm(row))+'</td>'+
-      '<td style="text-align:right;font-family:monospace">'+fmtN(cSvc(row))+'</td>'+
-      '<td style="text-align:right;font-family:monospace">'+fmtN(cExt(row))+'</td>'+
-      '<td style="text-align:right;font-family:monospace;font-weight:600;color:#1a7a4a">'+fmtN(cTot(row))+'</td>'+
-    '</tr>';
+function delRow(id){
+  if(!confirm('Remover este chamado?'))return;
+  api('/api/chamados/'+id,{method:'DELETE'}).then(function(r){
+    if(r&&r.ok){rows=rows.filter(function(x){return x.id!==id;});render(false);}
   });
-  return '<div style="text-align:center;margin-bottom:18px">'+
-    '<h3 style="font-size:18px;font-weight:600;color:#1F497D;font-family:sans-serif;margin-bottom:3px">Purificatta — Relatório de Chamados</h3>'+
-    '<p style="font-size:12px;color:#5a7a9a">Emitido em '+exportDate+'</p></div>'+
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;padding:14px;background:#DCE6F1;border-radius:8px">'+
-    '<div><div style="font-size:10px;font-weight:600;color:#1F497D;text-transform:uppercase;margin-bottom:2px">Prestador</div><div>'+PREST+'</div></div>'+
-    '<div><div style="font-size:10px;font-weight:600;color:#1F497D;text-transform:uppercase;margin-bottom:2px">Ano de Referência</div><div>'+ANO+'</div></div>'+
-    '<div><div style="font-size:10px;font-weight:600;color:#1F497D;text-transform:uppercase;margin-bottom:2px">Total de Chamados</div><div>'+rws.length+'</div></div>'+
-    '<div><div style="font-size:10px;font-weight:600;color:#1F497D;text-transform:uppercase;margin-bottom:2px">Total Geral</div>'+
-    '<div style="color:#1a7a4a;font-family:monospace;font-weight:600">'+fmt(st)+'</div></div></div>'+
-    '<table class="pdf-table">'+
-    '<thead><tr>'+
-    '<th style="text-align:left;padding-left:8px">Data</th><th>Chamado</th><th>Cliente</th><th>KM</th>'+
-    '<th style="text-align:left">Descrição</th><th>Tempo</th><th>Estac.</th><th>Peças</th>'+
-    '<th>T.KM</th><th>T.Serv.</th><th>T.Extra</th><th>Total</th>'+
+}
+
+// ── PDF ──
+function buildPDF(rs){
+  var sk=0,ss=0,se=0,st=0;
+  rs.forEach(function(r){sk+=cKm(r);ss+=cSvc(r);se+=cExt(r);st+=cTot(r);});
+  var mes=document.getElementById('filtMes').value;
+  var ano=document.getElementById('filtAno').value;
+  var MESES=['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  var per=(mes?MESES[+mes]+' ':'')+ano;
+  var tbody=rs.map(function(r,i){
+    return '<tr>'+
+      '<td>'+fmtDate(r.data_chamado)+'</td>'+
+      '<td style="text-align:center">'+(r.numero_chamado||'—')+'</td>'+
+      '<td>'+(r.cliente||'—')+'</td>'+
+      '<td style="text-align:center">'+(r.km_ida_volta||0)+' km</td>'+
+      '<td style="text-align:left;max-width:140px;word-wrap:break-word">'+(r.descricao||'—')+'</td>'+
+      '<td style="text-align:center">'+hhmm(pTime(r.tempo_horas))+'</td>'+
+      '<td style="text-align:right;font-family:monospace">'+fmtN(r.estacionamento)+'</td>'+
+      '<td style="text-align:right;font-family:monospace">'+fmtN(r.pecas)+'</td>'+
+      '<td style="text-align:right;font-family:monospace">'+fmtN(cKm(r))+'</td>'+
+      '<td style="text-align:right;font-family:monospace">'+fmtN(cSvc(r))+'</td>'+
+      '<td style="text-align:right;font-family:monospace">'+fmtN(cExt(r))+'</td>'+
+      '<td style="text-align:right;font-family:monospace;font-weight:700;color:#1a7a4a">'+fmtN(cTot(r))+'</td>'+
+    '</tr>';
+  }).join('');
+  return '<div style="text-align:center;margin-bottom:16px">'+
+    '<h3 style="font-size:17px;font-weight:600;color:#1F497D;font-family:sans-serif;margin-bottom:3px">Purificatta — Relatório de Chamados</h3>'+
+    '<p style="font-size:12px;color:#5a7a9a">Período: '+per+' • Emitido em '+new Date().toLocaleDateString('pt-BR')+'</p></div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;padding:12px;background:#DCE6F1;border-radius:8px">'+
+      '<div><div style="font-size:10px;font-weight:700;color:#1F497D;text-transform:uppercase;margin-bottom:2px">Prestador</div><div style="font-size:13px">'+(PREST.nome||localStorage.getItem('puri_nome')||'')+'</div></div>'+
+      '<div><div style="font-size:10px;font-weight:700;color:#1F497D;text-transform:uppercase;margin-bottom:2px">Total de Chamados</div><div style="font-size:13px">'+rs.length+'</div></div>'+
+    '</div>'+
+    '<table class="pdf-table"><thead><tr>'+
+      '<th style="text-align:left;padding-left:8px">Data</th><th>Chamado</th><th>Cliente</th><th>KM</th><th style="text-align:left">Descrição</th><th>Tempo</th><th>Estac.</th><th>Peças</th><th>T.KM</th><th>T.Serv.</th><th>T.Extra</th><th>Total</th>'+
     '</tr></thead><tbody>'+tbody+'</tbody>'+
-    '<tfoot><tr class="tot-row">'+
-    '<td colspan="8" style="text-align:right;padding-right:8px;font-size:11px">TOTAIS</td>'+
-    '<td style="text-align:right;font-family:monospace">'+fmtN(sk)+'</td>'+
-    '<td style="text-align:right;font-family:monospace">'+fmtN(ss)+'</td>'+
-    '<td style="text-align:right;font-family:monospace">'+fmtN(se)+'</td>'+
-    '<td style="text-align:right;font-family:monospace">'+fmtN(st)+'</td>'+
+    '<tfoot><tr class="tot"><td colspan="8" style="text-align:right;padding-right:8px;font-size:10px">TOTAIS</td>'+
+      '<td style="text-align:right;font-family:monospace">'+fmtN(sk)+'</td>'+
+      '<td style="text-align:right;font-family:monospace">'+fmtN(ss)+'</td>'+
+      '<td style="text-align:right;font-family:monospace">'+fmtN(se)+'</td>'+
+      '<td style="text-align:right;font-family:monospace">'+fmtN(st)+'</td>'+
     '</tr></tfoot></table>'+
     '<div class="pdf-ft">'+
-    '<div class="pdf-ft-b"><label>Total KM</label><span>'+fmt(sk)+'</span></div>'+
-    '<div class="pdf-ft-b"><label>Total Serviços</label><span>'+fmt(ss)+'</span></div>'+
-    '<div class="pdf-ft-b"><label>Total Extra</label><span>'+fmt(se)+'</span></div>'+
-    '<div class="pdf-ft-b gd"><label>Total Geral</label><span>'+fmt(st)+'</span></div></div>'+
+      '<div class="pdf-ft-b"><label>Total KM</label><span>'+fmt(sk)+'</span></div>'+
+      '<div class="pdf-ft-b"><label>Total Serviços</label><span>'+fmt(ss)+'</span></div>'+
+      '<div class="pdf-ft-b"><label>Total Extra</label><span>'+fmt(se)+'</span></div>'+
+      '<div class="pdf-ft-b gd"><label>Total Geral</label><span>'+fmt(st)+'</span></div>'+
+    '</div>'+
     '<div class="sign">'+
-    '<div class="sign-l"><div>Purificatta Ind. Com. e Serviços de Purificação de Água Ltda.<br>CNPJ: 13.769.335/0001-10</div></div>'+
-    '<div class="sign-l"><div>'+PREST+'<br>Prestador de Serviços</div></div></div>';
+      '<div class="sign-l"><div>Purificatta Ind. Com. e Serviços de Purificação de Água Ltda.<br>CNPJ: 13.769.335/0001-10</div></div>'+
+      '<div class="sign-l"><div>'+(PREST.nome||'')+'<br>Prestador de Serviços</div></div>'+
+    '</div>';
 }
 
 function abrirPDF(){
-  var hoje=new Date().toLocaleDateString('pt-BR');
-  var html=buildPDFHTML(rows,hoje);
-  document.getElementById('pdfCont').innerHTML=html;
+  if(!rows.length){alert('Nenhum chamado para gerar PDF.');return;}
+  document.getElementById('pdfCont').innerHTML=buildPDF(rows);
   document.getElementById('ovPDF').classList.add('show');
-  hist.unshift({ts:new Date().toISOString(),chamados:rows.length,total:rows.reduce(function(s,r){return s+cTot(r);},0),snap:JSON.parse(JSON.stringify(rows))});
+  // Save to historico
+  api('/api/historico-pdf',{method:'POST',body:JSON.stringify({
+    prestador_id:PRESTADOR_ID,
+    total_chamados:rows.length,
+    total_geral:rows.reduce(function(s,r){return s+cTot(r);},0),
+    snapshot:rows,
+    periodo_mes:parseInt(document.getElementById('filtMes').value)||null,
+    periodo_ano:parseInt(document.getElementById('filtAno').value)||null
+  })});
 }
 
 function imprimirPDF(){
   var w=window.open('','_blank');
-  w.document.write('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório Purificatta</title>'+
-    '<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">'+
-    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:\'DM Sans\',sans-serif;padding:28px;color:#1a2e45;font-size:13px}'+
-    'table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px}'+
-    'thead th{background:#1F497D;color:#fff;padding:7px 5px;font-size:9px;text-transform:uppercase}'+
-    'td{padding:6px 5px;border-bottom:1px solid #edf2f8}tr:nth-child(even) td{background:#f8fbff}'+
-    '.pdf-ft{display:flex;gap:16px;padding:12px 16px;background:#1F497D;border-radius:8px;margin-bottom:20px}'+
-    '.pdf-ft-b{display:flex;flex-direction:column;gap:2px}'+
-    '.pdf-ft-b label{font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px}'+
-    '.pdf-ft-b span{font-family:monospace;font-size:13px;color:#fff}'+
-    '.pdf-ft-b.gd span{color:#7effc1;font-size:17px;font-weight:600}'+
-    '.sign{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px}'+
-    '.sign-l{text-align:center}.sign-l div{border-top:1px solid #999;padding-top:6px;font-size:11px;color:#5a7a9a}'+
-    '.tot-row td{background:#DCE6F1!important;font-weight:600;color:#1F497D}'+
-    '@media print{body{padding:12px}}</style></head><body>'+
-    document.getElementById('pdfCont').innerHTML+'</body></html>');
-  w.document.close();w.focus();setTimeout(function(){w.print();},500);
-}
-
-function abrirHist(){
-  var cont=document.getElementById('histCont');
-  if(!hist.length){
-    cont.innerHTML='<p style="text-align:center;color:#999;padding:28px;font-size:13px">Nenhuma exportação nesta sessão ainda.</p>';
-  } else {
-    var html='<table style="width:100%;border-collapse:collapse;font-size:13px">'+
-      '<thead><tr style="background:#DCE6F1">'+
-      '<th style="padding:9px 12px;text-align:left;color:#1F497D;font-size:10px;text-transform:uppercase">Data/Hora</th>'+
-      '<th style="padding:9px 8px;text-align:center;color:#1F497D;font-size:10px;text-transform:uppercase">Chamados</th>'+
-      '<th style="padding:9px 8px;text-align:right;color:#1F497D;font-size:10px;text-transform:uppercase">Total</th>'+
-      '<th style="padding:9px 8px;text-align:center;color:#1F497D;font-size:10px;text-transform:uppercase">Ação</th>'+
-      '</tr></thead><tbody>';
-    hist.forEach(function(h,i){
-      var d=new Date(h.ts);
-      var ds=d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-      html+='<tr style="background:'+(i%2===0?'#fff':'#f8fbff')+';border-bottom:1px solid #edf2f8">'+
-        '<td style="padding:9px 12px;font-weight:500">'+ds+'</td>'+
-        '<td style="padding:9px 8px;text-align:center;color:#5a7a9a">'+h.chamados+' chamado'+(h.chamados!==1?'s':'')+'</td>'+
-        '<td style="padding:9px 8px;text-align:right;font-family:monospace;font-weight:600;color:#1a7a4a">'+fmt(h.total)+'</td>'+
-        '<td style="padding:9px 8px;text-align:center">'+
-          '<button onclick="verHistPDF('+i+')" style="background:#e67e22;color:#fff;border:none;border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer">📄 Ver PDF</button>'+
-        '</td></tr>';
-    });
-    html+='</tbody></table>';
-    cont.innerHTML=html;
-  }
-  document.getElementById('ovHist').classList.add('show');
-}
-
-function verHistPDF(i){
-  if(!hist[i])return;
-  var d=new Date(hist[i].ts);
-  var ds=d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-  var html=buildPDFHTML(hist[i].snap,ds);
-  var w=window.open('','_blank');
-  w.document.write('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório Purificatta</title>'+
-    '<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">'+
-    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:\'DM Sans\',sans-serif;padding:28px;color:#1a2e45;font-size:13px}'+
-    'table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px}'+
-    'thead th{background:#1F497D;color:#fff;padding:7px 5px;font-size:9px;text-transform:uppercase}'+
-    'td{padding:6px 5px;border-bottom:1px solid #edf2f8}tr:nth-child(even) td{background:#f8fbff}'+
-    '.pdf-ft{display:flex;gap:16px;padding:12px 16px;background:#1F497D;border-radius:8px;margin-bottom:20px}'+
-    '.pdf-ft-b{display:flex;flex-direction:column;gap:2px}'+
-    '.pdf-ft-b label{font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px}'+
-    '.pdf-ft-b span{font-family:monospace;font-size:13px;color:#fff}'+
-    '.pdf-ft-b.gd span{color:#7effc1;font-size:17px;font-weight:600}'+
-    '.sign{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px}'+
-    '.sign-l{text-align:center}.sign-l div{border-top:1px solid #999;padding-top:6px;font-size:11px;color:#5a7a9a}'+
-    '.tot-row td{background:#DCE6F1!important;font-weight:600;color:#1F497D}'+
-    '@media print{body{padding:12px}}</style></head><body>'+html+'</body></html>');
-  w.document.close();w.focus();setTimeout(function(){w.print();},500);
+  var css='*{box-sizing:border-box;margin:0;padding:0}body{font-family:\'DM Sans\',sans-serif;padding:24px;color:#1a2e45;font-size:13px}.pdf-table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:14px}.pdf-table th{background:#1F497D;color:#fff;padding:6px 5px;font-size:9px;text-transform:uppercase;text-align:center}.pdf-table th:first-child{text-align:left;padding-left:8px}.pdf-table td{padding:5px;border-bottom:1px solid #edf2f8;text-align:center}.pdf-table td:first-child{text-align:left;padding-left:8px}.pdf-table tr:nth-child(even) td{background:#f8fbff}.pdf-table .tot td{background:#DCE6F1!important;font-weight:700;color:#1F497D}.pdf-ft{display:flex;gap:14px;padding:11px 14px;background:#1F497D;border-radius:7px;margin-bottom:18px;flex-wrap:wrap}.pdf-ft-b label{display:block;font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:1px}.pdf-ft-b span{font-family:monospace;font-size:12px;color:#fff}.pdf-ft-b.gd span{color:#7effc1;font-size:16px;font-weight:700}.sign{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:32px}.sign-l{text-align:center}.sign-l div{border-top:1px solid #999;padding-top:6px;font-size:11px;color:#5a7a9a}@media print{body{padding:12px}}';
+  w.document.write('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório Purificatta</title><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"><style>'+css+'</style></head><body>'+document.getElementById('pdfCont').innerHTML+'</body></html>');
+  w.document.close();w.focus();setTimeout(function(){w.print();},600);
 }
 
 function exportCSV(){
-  var h=['Data','Chamado','Cliente','KM','Descricao','Tempo','Estac','Pecas','Tot.KM','Tot.Servico','Tot.Extra','Total'];
+  if(!rows.length){alert('Nenhum dado para exportar.');return;}
+  var h=['Data','Chamado','Cliente','KM','Descricao','Tempo(h)','Estac','Pecas','Tot.KM','Tot.Servico','Tot.Extra','Total'];
   var lines=[h.join(';')];
-  rows.forEach(function(row){
-    var df=row.data?new Date(row.data+'T12:00:00').toLocaleDateString('pt-BR'):'';
-    lines.push([df,row.chamado||'',row.cliente||'',row.km||'0',(row.desc||'').replace(/;/g,','),row.tempo||'',row.estac||'0',row.pecas||'0',cKm(row).toFixed(2),cSvc(row).toFixed(2),cExt(row).toFixed(2),cTot(row).toFixed(2)].join(';'));
+  rows.forEach(function(r){
+    lines.push([fmtDate(r.data_chamado),r.numero_chamado||'',r.cliente||'',r.km_ida_volta||0,(r.descricao||'').replace(/;/g,','),pTime(r.tempo_horas).toFixed(2),r.estacionamento||0,r.pecas||0,cKm(r).toFixed(2),cSvc(r).toFixed(2),cExt(r).toFixed(2),cTot(r).toFixed(2)].join(';'));
   });
-  lines.push(['TOTAL','','','','','','','','','','',rows.reduce(function(s,r){return s+cTot(r);},0).toFixed(2)].join(';'));
   var blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8;'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='chamados_'+PREST.replace(/\s+/g,'_')+'_'+ANO+'.csv';a.click();
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='chamados_'+(PREST.nome||'prestador').replace(/\s+/g,'_')+'.csv';a.click();
 }
+
+function abrirHist(){
+  document.getElementById('ovHist').classList.add('show');
+  api('/api/historico-pdf?prestador_id='+PRESTADOR_ID).then(function(hs){
+    if(!hs||!hs.length){document.getElementById('histCont').innerHTML='<div style="text-align:center;color:var(--tl);padding:24px;font-size:13px">Nenhum PDF gerado ainda.</div>';return;}
+    var MESES=['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    document.getElementById('histCont').innerHTML='<table style="width:100%;border-collapse:collapse;font-size:13px">'+
+      '<thead><tr style="background:var(--azf)"><th style="padding:9px 12px;text-align:left;color:var(--az);font-size:10px;text-transform:uppercase">Data/Hora</th><th style="padding:9px;text-align:center;color:var(--az);font-size:10px;text-transform:uppercase">Chamados</th><th style="padding:9px;text-align:right;color:var(--az);font-size:10px;text-transform:uppercase">Total</th></tr></thead><tbody>'+
+      hs.map(function(h,i){
+        var d=new Date(h.gerado_em);
+        var ds=d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+        var per=(h.periodo_mes?MESES[h.periodo_mes]+' ':''+(h.periodo_ano||''));
+        return '<tr style="background:'+(i%2===0?'#fff':'#f8fbff')+';border-bottom:1px solid #edf2f8">'+
+          '<td style="padding:9px 12px"><strong>'+ds+'</strong><br><span style="font-size:11px;color:var(--tl)">'+per+'</span></td>'+
+          '<td style="padding:9px;text-align:center;color:var(--tl)">'+h.total_chamados+'</td>'+
+          '<td style="padding:9px;text-align:right;font-family:monospace;font-weight:700;color:var(--vd)">'+fmt(h.total_geral)+'</td></tr>';
+      }).join('')+
+      '</tbody></table>';
+  });
+}
+
+// ── INIT ──
+loadPrestador();
+// Set current month as default
+var now=new Date();
+document.getElementById('filtAno').value=now.getFullYear();
+document.getElementById('filtMes').value=now.getMonth()+1;
+loadChamados();
 </script>
 </body>
 </html>
