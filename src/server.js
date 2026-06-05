@@ -248,13 +248,15 @@ app.post('/api/chamados', authAny, async (req, res) => {
   try {
     let pid = req.body.prestador_id;
     if (req.user.role === 'prestador') pid = req.user.id;
+    console.log('[POST /api/chamados] role:', req.user.role, 'pid:', pid, 'body:', JSON.stringify(req.body));
+    if (!pid) return res.status(400).json({ error: 'prestador_id obrigatório' });
     const { data_chamado, numero_chamado, cliente, km_ida_volta, descricao, tempo_horas, estacionamento, pecas } = req.body;
     const { rows } = await db.query(`
       INSERT INTO chamados (prestador_id,data_chamado,numero_chamado,cliente,km_ida_volta,descricao,tempo_horas,estacionamento,pecas)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
       [pid, data_chamado||null, numero_chamado||null, cliente||null, km_ida_volta||0, descricao||null, tempo_horas||0, estacionamento||0, pecas||0]);
     res.status(201).json(rows[0]);
-  } catch (err) { res.status(500).json({ error: 'Erro interno' }); }
+  } catch (err) { console.error('[POST /api/chamados] error:', err.message); res.status(500).json({ error: err.message }); }
 });
 
 app.put('/api/chamados/:id', authAny, async (req, res) => {

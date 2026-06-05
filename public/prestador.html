@@ -375,12 +375,17 @@ function addRow(){
   var hoje=ano+'-'+String(mes).padStart(2,'0')+'-'+String(new Date().getDate()).padStart(2,'0');
   var btn=document.getElementById('btnAddRow');
   btn.disabled=true;btn.textContent='Aguarde...';
-  api('/api/chamados',{method:'POST',body:JSON.stringify({
-    prestador_id:pid,
-    data_chamado:hoje,
-    numero_chamado:'',cliente:'',km_ida_volta:0,descricao:'',tempo_horas:0,estacionamento:0,pecas:0
-  })}).then(function(r){
+  fetch('/api/chamados',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+TOKEN},
+    body:JSON.stringify({
+      prestador_id:pid,
+      data_chamado:hoje,
+      numero_chamado:'',cliente:'',km_ida_volta:0,descricao:'',tempo_horas:0,estacionamento:0,pecas:0
+    })
+  }).then(function(res){return res.json();}).then(function(r){
     btn.disabled=false;btn.textContent='＋ Nova linha';
+    console.log('[addRow] response:', r);
     if(r&&r.id){
       rows.push(r);
       render(false);
@@ -389,8 +394,12 @@ function addRow(){
         if(inp){inp.focus();inp.scrollIntoView({behavior:'smooth',block:'center'});}
       },80);
     } else {
-      alert('Erro ao adicionar linha: '+(r&&r.error?r.error:'Tente novamente'));
+      alert('Erro ao adicionar: '+(r&&r.error?r.error:'Verifique o console'));
     }
+  }).catch(function(e){
+    btn.disabled=false;btn.textContent='＋ Nova linha';
+    console.error('[addRow] fetch error:', e);
+    alert('Erro de conexão ao adicionar linha');
   });
 }
 
