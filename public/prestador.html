@@ -242,6 +242,9 @@ tbody td.tl{padding-left:10px;text-align:left}
 <script>
 var TOKEN = localStorage.getItem('puri_token');
 var PRESTADOR_ID = localStorage.getItem('puri_prestador_id');
+if(!PRESTADOR_ID){
+  try{PRESTADOR_ID=JSON.parse(atob(TOKEN.split('.')[1])).id;}catch(e){}
+}
 var PREST = {};   // full prestador data from API
 var rows = [];    // current view rows (from API)
 var allRows = []; // all rows loaded
@@ -361,14 +364,34 @@ function foot(){
 
 // ── ADD / UPDATE / DELETE ──
 function addRow(){
+  // Get prestador id from storage or token
+  var pid=PRESTADOR_ID;
+  if(!pid){
+    try{pid=JSON.parse(atob(TOKEN.split('.')[1])).id;}catch(e){}
+  }
+  if(!pid){alert('Erro: ID do prestador não encontrado. Faça login novamente.');sair();return;}
   var ano=document.getElementById('filtAno').value||new Date().getFullYear();
-  var mes=document.getElementById('filtMes').value||(new Date().getMonth()+1);
+  var mes=parseInt(document.getElementById('filtMes').value||(new Date().getMonth()+1));
   var hoje=ano+'-'+String(mes).padStart(2,'0')+'-'+String(new Date().getDate()).padStart(2,'0');
+  var btn=document.getElementById('btnAddRow');
+  btn.disabled=true;btn.textContent='Aguarde...';
   api('/api/chamados',{method:'POST',body:JSON.stringify({
-    prestador_id:PRESTADOR_ID,
+    prestador_id:pid,
     data_chamado:hoje,
     numero_chamado:'',cliente:'',km_ida_volta:0,descricao:'',tempo_horas:0,estacionamento:0,pecas:0
-  })}).then(function(r){if(r&&r.id){rows.push(r);render(false);setTimeout(function(){var inp=document.querySelector('tr[data-id="'+r.id+'"] input');if(inp)inp.focus();},50);}});
+  })}).then(function(r){
+    btn.disabled=false;btn.textContent='＋ Nova linha';
+    if(r&&r.id){
+      rows.push(r);
+      render(false);
+      setTimeout(function(){
+        var inp=document.querySelector('tr[data-id="'+r.id+'"] input');
+        if(inp){inp.focus();inp.scrollIntoView({behavior:'smooth',block:'center'});}
+      },80);
+    } else {
+      alert('Erro ao adicionar linha: '+(r&&r.error?r.error:'Tente novamente'));
+    }
+  });
 }
 
 function updRow(id,el){

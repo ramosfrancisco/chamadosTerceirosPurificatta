@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Purificatta — Painel Admin</title>
 <script>
 (function(){
@@ -164,6 +164,45 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
 /* LOG */
 .log-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border);font-size:12px}
 .log-row:last-child{border-bottom:none}.log-row:hover{background:var(--hover)}
+/* ── MOBILE RESPONSIVE ── */
+@media(max-width:768px){
+  :root{--sidebar:0px}
+  body{flex-direction:column}
+  .sb{width:100%;min-height:auto;position:relative;flex-direction:row;flex-wrap:wrap;padding-bottom:0}
+  .sb-logo{padding:14px 16px 12px;flex:1}
+  .sb-logo h1{font-size:16px}
+  .sb-foot{display:none}
+  .sb-nav{display:flex;flex-direction:row;flex-wrap:wrap;padding:0;width:100%;border-top:1px solid rgba(255,255,255,.1)}
+  .ni{padding:10px 14px;font-size:12px;gap:6px;border-left:none;border-bottom:3px solid transparent;flex:1;justify-content:center;min-width:60px}
+  .ni.active{border-left:none;border-bottom-color:#7dd3fc}
+  .ni .ic{display:none}
+  .main{margin-left:0;width:100%}
+  .topbar{padding:0 16px;height:48px}
+  .topbar-title{font-size:13px}
+  .content{padding:16px}
+  .stats{grid-template-columns:1fr 1fr;gap:10px}
+  .chart-grid{grid-template-columns:1fr}
+  .dcols{grid-template-columns:1fr}
+  .sh{flex-direction:column;align-items:flex-start}
+  table{font-size:12px}
+  thead th{padding:8px 8px;font-size:9px}
+  tbody td{padding:9px 8px}
+  .det-hd{flex-direction:column}
+  .dh{padding:16px 18px}
+  .db{padding:16px 18px}
+  .df{padding:12px 18px}
+  .drawer{width:100%;max-width:100vw}
+  .mbox{margin:16px;width:auto;max-width:calc(100vw - 32px)}
+  .fg2{grid-template-columns:1fr}
+  .card-box{overflow-x:auto}
+  .card-box table{min-width:600px}
+}
+@media(max-width:480px){
+  .stats{grid-template-columns:1fr}
+  .stat .val{font-size:20px}
+  .sb-nav .ni span:not(.ic){font-size:11px}
+  .topbar-r .btn:first-child{display:none}
+}
 </style>
 </head>
 <body>
