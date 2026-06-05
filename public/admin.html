@@ -410,6 +410,12 @@ tbody td{padding:11px 14px;font-size:13px;vertical-align:middle}
           <div class="field"><label>Senha Inicial *</label><input type="password" id="f-senha" placeholder="Mínimo 6 caracteres"></div>
           <div class="field"><label>Confirmar Senha *</label><input type="password" id="f-conf" placeholder="Repita a senha"></div>
         </div>
+        <div id="editSenhaBtn" style="display:none;margin-top:10px">
+          <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:10px 13px;font-size:12px;color:#7d6200;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+            <span>🔑 Para alterar a senha de acesso deste prestador, use o botão abaixo.</span>
+            <button class="btn bgh bsm" onclick="openModalResetPrest()" type="button">Redefinir Senha</button>
+          </div>
+        </div>
         <div class="info-box">🔒 Perfil: <strong>Prestador</strong> — acessa apenas a própria tabela de chamados. A URL de acesso é a mesma para todos: o sistema redireciona pelo perfil após o login.</div>
         <div class="err-msg" id="dErr"></div>
       </div>
@@ -778,9 +784,11 @@ function openDrawerNovo(){
   document.getElementById('dFoot1').style.display='flex';
   document.getElementById('dFoot2').style.display='none';
   document.getElementById('dErr').textContent='';
-  // Show senha fields for new prestador
+  // Show senha fields for new prestador, hide reset btn
   document.getElementById('f-senha').closest('.field').style.display='flex';
   document.getElementById('f-conf').closest('.field').style.display='flex';
+  document.getElementById('f-login').removeAttribute('disabled');
+  document.getElementById('editSenhaBtn').style.display='none';
   openDrawer();
 }
 
@@ -810,9 +818,10 @@ function openDrawerEditar(id){
     document.getElementById('f-inst').value=p.valor_inst||'';
     document.getElementById('f-trans').value=p.valor_trans||'';
     document.getElementById('f-login').value=p.login||'';
-    // Hide senha fields on edit
+    // Hide senha fields on edit, show reset button instead
     document.getElementById('f-senha').closest('.field').style.display='none';
     document.getElementById('f-conf').closest('.field').style.display='none';
+    document.getElementById('editSenhaBtn').style.display='block';
     document.getElementById('dStep1').style.display='block';
     document.getElementById('dStep2').style.display='none';
     document.getElementById('dFoot1').style.display='flex';
