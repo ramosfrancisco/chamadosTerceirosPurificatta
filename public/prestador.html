@@ -302,7 +302,7 @@ function loadChamados(){
   var url='/api/chamados?prestador_id='+PRESTADOR_ID+'&ano='+ano+(mes?'&mes='+mes:'');
   document.getElementById('tbBody').innerHTML='<tr><td colspan="13" style="text-align:center;padding:20px;color:var(--tl)">Carregando...</td></tr>';
   api(url).then(function(cs){
-    if(!cs)cs=[];
+    if(!cs||!Array.isArray(cs)){console.error('[chamados] bad response:',cs);cs=[];}
     rows=cs;
     var isClosed=cs.length>0 && cs.every(function(r){return r.periodo_fechado;});
     document.getElementById('closedBanner').style.display=isClosed?'flex':'none';
@@ -387,6 +387,7 @@ function addRow(){
     btn.disabled=false;btn.textContent='＋ Nova linha';
     console.log('[addRow] response:', r);
     if(r&&r.id){
+      if(!Array.isArray(rows))rows=[];
       rows.push(r);
       render(false);
       setTimeout(function(){

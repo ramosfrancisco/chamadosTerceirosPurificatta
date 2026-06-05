@@ -231,8 +231,7 @@ app.get('/api/chamados', authAny, async (req, res) => {
       ROUND((c.tempo_horas * p.valor_hora)::numeric,2) as total_servico,
       ROUND((c.estacionamento + c.pecas)::numeric,2) as total_extra,
       ROUND((c.km_ida_volta*p.valor_km + c.tempo_horas*p.valor_hora + c.estacionamento + c.pecas)::numeric,2) as total
-      FROM chamados c JOIN prestadores p ON p.id=c.prestador_id WHERE 1=1
-      -- include prestador nome`;
+      FROM chamados c JOIN prestadores p ON p.id=c.prestador_id WHERE 1=1`;
     const params = [];
     let i = 1;
     if (pid) { query += ` AND c.prestador_id=$${i++}`; params.push(pid); }
@@ -241,7 +240,7 @@ app.get('/api/chamados', authAny, async (req, res) => {
     query += ' ORDER BY c.data_chamado ASC, c.created_at ASC';
     const { rows } = await db.query(query, params);
     res.json(rows);
-  } catch (err) { res.status(500).json({ error: 'Erro interno' }); }
+  } catch (err) { console.error('[GET chamados]',err.message); res.status(500).json({ error: err.message }); }
 });
 
 app.post('/api/chamados', authAny, async (req, res) => {
