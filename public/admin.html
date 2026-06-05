@@ -952,26 +952,43 @@ function exportChamCSV(){
 function loadAdmins(){
   api('/api/admins').then(function(as){
     if(!as)return;
+    window._adminList=as;
     var myId=null;
     try{myId=JSON.parse(atob(TOKEN.split('.')[1])).id;}catch(e){}
-    var html=as.map(function(a){
+    var rows=as.map(function(a,ai){
       var isMe=a.id===myId;
       var st=a.ativo?'<span class="badge bvd">Ativo</span>':'<span class="badge bvm">Inativo</span>';
-      var acoes='<button class="btn bgh bxs" onclick="openModalEditAdmin(\''+a.id+'\',\''+a.nome+'\',\''+a.email+'\',\''+(a.cargo||'\')+'\')">✏️</button>';
-      if(isMe)acoes+=' <button class="btn bgh bxs" onclick="openModal(\'mMinhaSenha\')">🔑 Minha Senha</button>';
-      else acoes+=' <button class="btn bgh bxs" onclick="openModalResetAdmin(\''+a.id+'\',\''+a.nome+'\')">🔑</button>'+
-        (a.ativo?'<button class="btn bd2 bxs" style="margin-left:4px" onclick="toggleAdmin(\''+a.id+'\',false)">⏸</button>':
-                 '<button class="btn bg2 bxs" style="margin-left:4px" onclick="toggleAdmin(\''+a.id+'\',true)">▶</button>');
+      var acoes='<button class="btn bgh bxs" data-ai="'+ai+'" onclick="editAdmin(+this.dataset.ai)">&#9999; Editar</button> ';
+      if(isMe){
+        acoes+='<button class="btn bgh bxs" onclick="openModal(String.fromCharCode(109,77,105,110,104,97,83,101,110,104,97))">&#128273; Minha Senha</button>';
+      } else {
+        acoes+='<button class="btn bgh bxs" data-ai="'+ai+'" onclick="resetAdmin(+this.dataset.ai)">&#128273;</button> ';
+        acoes+=a.ativo
+          ?'<button class="btn bd2 bxs" data-id="'+a.id+'" onclick="toggleAdmin(this.dataset.id,false)">&#9646;</button>'
+          :'<button class="btn bg2 bxs" data-id="'+a.id+'" onclick="toggleAdmin(this.dataset.id,true)">&#9654;</button>';
+      }
       return '<tr'+(isMe?' style="background:rgba(255,200,0,.06)"':'')+'>'+
-        '<td><div style="display:flex;align-items:center;gap:8px"><div class="av" style="width:28px;height:28px;font-size:10px">'+initials(a.nome)+'</div>'+
-        '<div><strong style="font-size:13px">'+a.nome+'</strong>'+(isMe?'<br><span style="font-size:10px;color:var(--tl)">Você</span>':'')+'</div></div></td>'+
+        '<td><div style="display:flex;align-items:center;gap:8px">'+
+          '<div class="av" style="width:28px;height:28px;font-size:10px">'+initials(a.nome)+'</div>'+
+          '<div><strong style="font-size:13px">'+a.nome+'</strong>'+
+          (isMe?'<br><span style="font-size:10px;color:var(--tl)">Voce</span>':'')+
+          '</div></div></td>'+
         '<td style="font-size:12px;color:var(--tl)">'+a.email+'</td>'+
-        '<td>'+st+'</td><td><div style="display:flex;gap:4px;align-items:center">'+acoes+'</div></td></tr>';
+        '<td>'+st+'</td>'+
+        '<td><div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center">'+acoes+'</div></td></tr>';
     }).join('');
-    document.getElementById('adminTable').innerHTML=html||'<tr><td colspan="4" style="text-align:center;padding:20px">—</td></tr>';
+    document.getElementById('adminTable').innerHTML=rows||'<tr><td colspan="4" style="text-align:center;padding:20px">Nenhum admin</td></tr>';
   });
 }
 
+function editAdmin(idx){
+  var a=window._adminList[idx];if(!a)return;
+  openModalEditAdmin(a.id,a.nome,a.email,a.cargo||'');
+}
+function resetAdmin(idx){
+  var a=window._adminList[idx];if(!a)return;
+  openModalResetAdmin(a.id,a.nome);
+}
 function loadConfiguracoes(){
   loadAdmins();
   api('/api/configuracoes').then(function(c){
